@@ -1,4 +1,8 @@
 .DS_Store
 
+# assembled by deploy.sh, not source
+deploy/
+.wrangler/
+
 # scratch pages used while drawing the figures
 _*.html

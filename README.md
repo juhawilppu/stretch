@@ -7,7 +7,7 @@ kind of thing you do, and doing it every day beats doing twenty minutes of it
 once a fortnight. So this shows exactly one stretch, a picture of it, and how
 long to hold it, then counts the hold down for you and keeps the streak.
 
-**→ [juhawilppu.github.io/daily-stretch](https://juhawilppu.github.io/daily-stretch/)**
+**→ [daily-stretch.juhawilppu.com](https://daily-stretch.juhawilppu.com/)**
 
 ## What it does
 
@@ -77,6 +77,7 @@ across a daylight-saving change, and that every stretch has cues and a figure.
 | `figures.js` | one hand-drawn SVG per stretch |
 | `rotation.js` | the daily-pick rule, kept testable outside a browser |
 | `app.js` | rendering, the timer, the streak |
+| `deploy.sh` | assembles `deploy/` and publishes it to Cloudflare Pages |
 
 The drawings are hand-authored SVG on a shared 200×220 grid, built from a small
 set of CSS classes (`fig-limb`, `fig-torso`, `fig-hot` for the muscle under
@@ -86,4 +87,16 @@ one background.
 
 ## Deploying
 
-Served by GitHub Pages from `master`. Pushing to `master` publishes it.
+Cloudflare Pages, direct upload — the same arrangement as `kantarelli-map`:
+
+```sh
+./deploy.sh
+```
+
+That runs the tests, assembles `deploy/` from just the seven files a browser
+needs — the README and the tests stay off the published site — and uploads it to
+the `daily-stretch` project. `deploy/` is generated, so it is gitignored rather
+than committed.
+
+Pushing to `master` does **not** publish: the project is direct-upload rather
+than wired to the repo, so deploying is always an explicit `./deploy.sh`.
