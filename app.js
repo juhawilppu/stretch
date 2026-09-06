@@ -1,0 +1,310 @@
+/**
+ * Daily Stretch
+ *
+ * One stretch per day, decided by the date rather than by chance, so reloading
+ * the page never rerolls it and every stretch comes up once before any repeats.
+ */
+(function () {
+  'use strict';
+
+  var STORAGE_KEY = 'daily-stretch:v1';
+  var DOT_DAYS = 14;
+  var SWITCH_SECONDS = 5;
+
+  // ------------------------------------------------------------------ dates
+
+  var dayKey     = Rotation.dayKey;
+  var parseKey   = Rotation.parseKey;
+  var dayNumber  = Rotation.dayNumber;
+  var addDays    = Rotation.addDays;
+  var pickForDay = Rotation.pickForDay;
+
+  function formatDate(d) {
+    try {
+      return d.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
+    } catch (e) {
+      return dayKey(d);
+    }
+  }
+
+  // ---------------------------------------------------------------- storage
+
+  function loadState() {
+    var blank = { last: null, streak: 0, longest: 0, history: [] };
+    try {
+      var raw = window.localStorage.getItem(STORAGE_KEY);
+      if (!raw) return blank;
+      var s = JSON.parse(raw);
+      return {
+        last: typeof s.last === 'string' ? s.last : null,
+        streak: Number(s.streak) || 0,
+        longest: Number(s.longest) || 0,
+        history: Array.isArray(s.history) ? s.history : []
+      };
+    } catch (e) {
+      return blank;                 // private window, blocked storage, corrupt value
+    }
+  }
+
+  function saveState(s) {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+    } catch (e) { /* the page still works without a streak */ }
+  }
+
+  /** A streak survives one open day: done yesterday and today still to come. */
+  function currentStreak(state, today) {
+    if (!state.last) return 0;
+    var gap = dayNumber(today) - dayNumber(parseKey(state.last));
+    return (gap === 0 || gap === 1) ? state.streak : 0;
+  }
+
+  function markDone(state, today) {
+    var key = dayKey(today);
+    if (state.last === key) return state;
+    var gap = state.last ? dayNumber(today) - dayNumber(parseKey(state.last)) : Infinity;
+    state.streak = gap === 1 ? state.streak + 1 : 1;
+    state.last = key;
+    state.longest = Math.max(state.longest, state.streak);
+    if (state.history.indexOf(key) === -1) state.history.push(key);
+    state.history = state.history.slice(-90);
+    return state;
+  }
+
+  // ------------------------------------------------------------------ sound
+
+  var audio = null;
+
+  function beep(freq, delay, duration) {
+    if (!audio) return;
+    var osc = audio.createOscillator();
+    var gain = audio.createGain();
+    var t = audio.currentTime + delay;
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.22, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+    osc.connect(gain).connect(audio.destination);
+    osc.start(t);
+    osc.stop(t + duration + 0.05);
+  }
+
+  function chime(kind) {
+    try {
+      if (!audio) {
+        var Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        audio = new Ctx();
+      }
+      if (audio.state === 'suspended') audio.resume();
+      if (kind === 'done') { beep(660, 0, 0.16); beep(880, 0.16, 0.4); }
+      else if (kind === 'rest') { beep(440, 0, 0.18); }
+      else { beep(660, 0, 0.22); }
+    } catch (e) { /* silence is an acceptable outcome */ }
+  }
+
+  // --------------------------------------------------------------- wake lock
+
+  var wakeLock = null;
+
+  function keepAwake() {
+    if (!navigator.wakeLock) return;
+    navigator.wakeLock.request('screen').then(function (lock) {
+      wakeLock = lock;
+    }, function () { /* denied or unsupported — nothing to do */ });
+  }
+
+  function releaseAwake() {
+    if (wakeLock) { try { wakeLock.release(); } catch (e) {} wakeLock = null; }
+  }
+
+  // ------------------------------------------------------------------- view
+
+  var el = {};
+  ['date', 'figure-body', 'area', 'name', 'hold', 'setup', 'steps', 'dial',
+   'dial-progress', 'dial-count', 'dial-phase', 'start', 'mark-done', 'note',
+   'streak-count', 'streak-word', 'dots', 'streak-sub'].forEach(function (id) {
+    el[id] = document.getElementById(id);
+  });
+
+  var RING = 2 * Math.PI * 54;
+  el['dial-progress'].style.strokeDasharray = RING;
+
+  /** A preview override (?date=YYYY-MM-DD) never writes to the streak. */
+  var override = null;
+  var match = /[?&]date=(\d{4}-\d{2}-\d{2})/.exec(window.location.search);
+  if (match) {
+    var d = parseKey(match[1]);
+    if (!isNaN(d.getTime())) override = d;
+  }
+
+  function today() { return override || new Date(); }
+
+  var stretch = null;
+  var shownDay = null;
+
+  function holdLabel(s) {
+    return s.perSide ? s.seconds + ' seconds each side' : s.seconds + ' seconds';
+  }
+
+  function renderStretch() {
+    var now = today();
+    shownDay = dayKey(now);
+    stretch = pickForDay(dayNumber(now), STRETCHES);
+
+    el.date.textContent = formatDate(now) + (override ? ' (preview)' : '');
+    el['figure-body'].innerHTML = FIGURES[stretch.id] || '';
+    el.area.textContent = stretch.area + ' · ' + stretch.target;
+    el.name.textContent = stretch.name;
+    el.hold.textContent = holdLabel(stretch);
+    el.setup.textContent = stretch.setup;
+    el.note.textContent = stretch.note;
+
+    el.steps.innerHTML = '';
+    stretch.steps.forEach(function (step) {
+      var li = document.createElement('li');
+      li.textContent = step;
+      el.steps.appendChild(li);
+    });
+
+    document.title = stretch.name + ' · Daily Stretch';
+    resetTimer();
+    renderStreak();
+  }
+
+  function renderStreak() {
+    var now = today();
+    var state = loadState();
+    var streak = currentStreak(state, now);
+    var doneToday = state.last === dayKey(now);
+
+    el['streak-count'].textContent = streak;
+    el['streak-word'].textContent = streak === 1 ? 'day in a row' : 'days in a row';
+
+    if (streak === 0) {
+      el['streak-sub'].textContent = 'Do today’s stretch and the chain begins.';
+    } else if (!doneToday) {
+      el['streak-sub'].textContent = 'Today is not marked yet — don’t break the chain.';
+    } else if (state.streak >= state.longest) {
+      el['streak-sub'].textContent = 'That is your best run yet.';
+    } else {
+      el['streak-sub'].textContent = 'Best run so far: ' + state.longest + ' days.';
+    }
+
+    el.dots.innerHTML = '';
+    for (var i = DOT_DAYS - 1; i >= 0; i--) {
+      var key = dayKey(addDays(now, -i));
+      var dot = document.createElement('span');
+      dot.className = 'dot' +
+        (state.history.indexOf(key) !== -1 ? ' is-done' : '') +
+        (i === 0 ? ' is-today' : '');
+      el.dots.appendChild(dot);
+    }
+
+    el['mark-done'].hidden = doneToday;
+    if (doneToday && !running) {
+      el.start.textContent = 'Done today — go again?';
+      el.start.classList.add('is-done');
+    }
+  }
+
+  function complete() {
+    if (override) { renderStreak(); return; }   // preview mode never writes
+    saveState(markDone(loadState(), today()));
+    renderStreak();
+  }
+
+  // ------------------------------------------------------------------ timer
+
+  var phases = [];
+  var phaseIndex = 0;
+  var deadline = 0;
+  var running = false;
+  var ticker = null;
+
+  function buildPhases(s) {
+    if (!s.perSide) return [{ label: 'Hold', secs: s.seconds }];
+    return [
+      { label: 'Left side', secs: s.seconds },
+      { label: 'Switch sides', secs: SWITCH_SECONDS, rest: true },
+      { label: 'Right side', secs: s.seconds }
+    ];
+  }
+
+  function resetTimer() {
+    running = false;
+    if (ticker) { clearInterval(ticker); ticker = null; }
+    releaseAwake();
+    el.dial.hidden = true;
+    el.dial.classList.remove('is-rest');
+    el.start.textContent = 'Start';
+    el.start.classList.remove('is-done');
+  }
+
+  function startPhase(i) {
+    phaseIndex = i;
+    var phase = phases[i];
+    deadline = Date.now() + phase.secs * 1000;
+    el.dial.classList.toggle('is-rest', !!phase.rest);
+    el['dial-phase'].textContent = phase.label;
+    paint(phase.secs, phase.secs);
+  }
+
+  function paint(remaining, total) {
+    el['dial-count'].textContent = Math.max(0, Math.ceil(remaining));
+    el['dial-progress'].style.strokeDashoffset = RING * (1 - Math.max(0, remaining) / total);
+  }
+
+  /** Driven by a wall-clock deadline, so a backgrounded tab does not drift. */
+  function tick() {
+    var phase = phases[phaseIndex];
+    var remaining = (deadline - Date.now()) / 1000;
+
+    if (remaining > 0) { paint(remaining, phase.secs); return; }
+
+    paint(0, phase.secs);
+    if (phaseIndex < phases.length - 1) {
+      chime(phases[phaseIndex + 1].rest ? 'rest' : 'phase');
+      startPhase(phaseIndex + 1);
+    } else {
+      chime('done');
+      resetTimer();
+      complete();
+    }
+  }
+
+  function start() {
+    chime('rest');                     // also unlocks audio on the user gesture
+    phases = buildPhases(stretch);
+    running = true;
+    el.dial.hidden = false;
+    el.start.textContent = 'Stop';
+    el.start.classList.remove('is-done');
+    keepAwake();
+    startPhase(0);
+    ticker = setInterval(tick, 100);
+  }
+
+  el.start.addEventListener('click', function () {
+    if (running) { resetTimer(); renderStreak(); } else { start(); }
+  });
+
+  el['mark-done'].addEventListener('click', function () {
+    complete();
+  });
+
+  // Re-acquire the screen lock after the tab comes back, and roll over at midnight.
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState !== 'visible') return;
+    if (running) keepAwake();
+    if (dayKey(today()) !== shownDay) renderStretch();
+  });
+
+  setInterval(function () {
+    if (!running && dayKey(today()) !== shownDay) renderStretch();
+  }, 60000);
+
+  renderStretch();
+
+})();

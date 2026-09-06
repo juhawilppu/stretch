@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daily Stretch</title>
+<meta name="description" content="One stretch a day. Today's pick, how to do it, and how long to hold it.">
+<meta name="theme-color" content="#f7f6f3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16150f" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <span class="wordmark">Daily Stretch</span>
+  <span class="date" id="date"></span>
+</header>
+
+<main class="card" id="card">
+  <div class="figure-wrap">
+    <svg class="figure" id="figure" viewBox="0 0 200 220" role="img" aria-labelledby="figure-title">
+      <title id="figure-title">Illustration of today's stretch</title>
+      <defs>
+        <marker id="fig-arrowhead" viewBox="0 0 10 10" refX="7" refY="5"
+                markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M0 1 L9 5 L0 9 z" class="fig-arrowhead"/>
+        </marker>
+      </defs>
+      <g id="figure-body"></g>
+    </svg>
+  </div>
+
+  <p class="area" id="area"></p>
+  <h1 class="name" id="name"></h1>
+  <p class="hold" id="hold"></p>
+
+  <p class="setup" id="setup"></p>
+  <ol class="steps" id="steps"></ol>
+
+  <section class="timer" aria-live="polite">
+    <div class="dial" id="dial" hidden>
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="dial-track" cx="60" cy="60" r="54"/>
+        <circle class="dial-progress" id="dial-progress" cx="60" cy="60" r="54"/>
+      </svg>
+      <div class="dial-inner">
+        <span class="dial-count" id="dial-count">0</span>
+        <span class="dial-phase" id="dial-phase"></span>
+      </div>
+    </div>
+    <button class="btn-primary" id="start" type="button">Start</button>
+    <button class="btn-quiet" id="mark-done" type="button">I stretched — mark today done</button>
+  </section>
+
+  <p class="note" id="note"></p>
+</main>
+
+<footer class="streak">
+  <p class="streak-line"><strong id="streak-count">0</strong> <span id="streak-word">days in a row</span></p>
+  <div class="dots" id="dots" aria-hidden="true"></div>
+  <p class="streak-sub" id="streak-sub"></p>
+</footer>
+
+<script src="stretches.js"></script>
+<script src="figures.js"></script>
+<script src="rotation.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
