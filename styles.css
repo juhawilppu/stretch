@@ -1,0 +1,316 @@
+/* Daily Stretch — one screen, mobile first, no framework. */
+
+:root {
+  --bg:          #f4f2ee;
+  --surface:     #ffffff;
+  --ink:         #1d1b17;
+  --muted:       #6f6a61;
+  --line:        #e3ded5;
+  --accent:      #c2540c;
+  --accent-soft: #fdf0e6;
+
+  --fig-body:    #2c2926;
+  --fig-prop:    #c9c2b6;
+  --fig-accent:  var(--accent);
+
+  --radius: 18px;
+  --shadow: 0 1px 2px rgba(28, 25, 20, .05), 0 8px 24px -12px rgba(28, 25, 20, .18);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:          #16150f;
+    --surface:     #201e17;
+    --ink:         #f0ece3;
+    --muted:       #a09a8d;
+    --line:        #322f25;
+    --accent:      #f0904a;
+    --accent-soft: #2e2318;
+
+    --fig-body:    #ebe6dc;
+    --fig-prop:    #565144;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -12px rgba(0, 0, 0, .7);
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 1rem 3rem;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.6 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------------------ topbar */
+
+.topbar {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.5rem .25rem 1rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.wordmark {
+  font-size: .72rem;
+  font-weight: 650;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.date {
+  font-size: .82rem;
+  color: var(--muted);
+}
+
+/* -------------------------------------------------------------------- card */
+
+.card {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 1.75rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.figure-wrap {
+  display: flex;
+  justify-content: center;
+  padding: .25rem 0 1rem;
+}
+
+.figure {
+  width: 100%;
+  max-width: 13.5rem;
+  height: auto;
+}
+
+/* Figure vocabulary — every stretch drawing is built from these. */
+.fig-limb, .fig-torso, .fig-hot, .fig-ground, .fig-prop, .fig-ghost, .fig-arrow {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.fig-limb      { stroke: var(--fig-body);   stroke-width: 8.5; }
+.fig-torso     { stroke: var(--fig-body);   stroke-width: 12; }
+.fig-head      { fill:   var(--fig-body); }
+.fig-nose      { fill:   var(--surface); }
+.fig-hot       { stroke: var(--fig-accent); stroke-width: 8.5; }
+/* Laid under a limb that passes in front of another, so the two read as
+   overlapping rather than merging into one shape. */
+.fig-knockout  { fill: none; stroke: var(--surface); stroke-width: 19;
+                 stroke-linecap: round; stroke-linejoin: round; }
+.fig-ground    { stroke: var(--fig-prop);   stroke-width: 3;  stroke-linecap: round; }
+.fig-prop      { stroke: var(--fig-prop);   stroke-width: 4; }
+.fig-ghost     { stroke: var(--fig-prop);   stroke-width: 5;  stroke-dasharray: 3 8; }
+.fig-ghost-head{ fill: none; stroke: var(--fig-prop); stroke-width: 3; stroke-dasharray: 3 7; }
+.fig-arrow     { stroke: var(--fig-accent); stroke-width: 3; }
+.fig-arrowhead { fill:   var(--fig-accent); stroke: none; }
+
+/* ------------------------------------------------------------------- copy */
+
+.area {
+  margin: 0 0 .3rem;
+  font-size: .68rem;
+  font-weight: 650;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.name {
+  margin: 0 0 .45rem;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  letter-spacing: -.015em;
+  font-weight: 640;
+}
+
+.hold {
+  margin: 0 0 1.25rem;
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.setup {
+  margin: 0 0 .85rem;
+  color: var(--muted);
+  font-size: .94rem;
+}
+
+.steps {
+  margin: 0 0 1.6rem;
+  padding-left: 1.15rem;
+  font-size: .96rem;
+}
+
+.steps li { margin-bottom: .45rem; }
+.steps li::marker { color: var(--accent); font-weight: 600; }
+
+.note {
+  margin: 1.5rem 0 0;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line);
+  font-size: .88rem;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------------ timer */
+
+.timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+}
+
+.dial {
+  position: relative;
+  width: 10.5rem;
+  height: 10.5rem;
+  margin-bottom: .25rem;
+}
+
+.dial svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+.dial-track {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 8;
+}
+
+.dial-progress {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset .3s linear;
+}
+
+.dial.is-rest .dial-progress { stroke: var(--muted); }
+
+.dial-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .15rem;
+}
+
+.dial-count {
+  font-size: 3rem;
+  font-weight: 640;
+  letter-spacing: -.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.dial-phase {
+  font-size: .7rem;
+  font-weight: 650;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 620;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: filter .15s, transform .1s;
+}
+
+.btn-primary:hover  { filter: brightness(1.07); }
+.btn-primary:active { transform: scale(.985); }
+
+.btn-primary.is-done {
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.btn-quiet {
+  padding: .35rem .5rem;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: .84rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.btn-quiet:hover { color: var(--ink); }
+.btn-quiet[hidden] { display: none; }
+
+/* ----------------------------------------------------------------- streak */
+
+.streak {
+  max-width: 30rem;
+  margin: 1.5rem auto 0;
+  padding: 0 .25rem;
+  text-align: center;
+}
+
+.streak-line {
+  margin: 0 0 .6rem;
+  font-size: .95rem;
+  color: var(--muted);
+}
+
+.streak-line strong {
+  font-size: 1.35rem;
+  font-weight: 660;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: .32rem;
+  margin-bottom: .6rem;
+}
+
+.dot {
+  width: .5rem;
+  height: .5rem;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.dot.is-done  { background: var(--accent); }
+.dot.is-today { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--accent); }
+
+.streak-sub {
+  margin: 0;
+  font-size: .8rem;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
