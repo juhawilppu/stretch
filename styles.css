@@ -1,19 +1,21 @@
 /* Daily Stretch — one fixed screen, no scrolling. A little arena, not a page. */
 
 :root {
-  --bg:          #efece4;
-  --bg-top:      #f7f4ed;
+  --bg:          #eaefec;
+  --bg-top:      #f6f9f7;
   --disc:        #ffffff;
-  --ink:         #1b1813;
-  --muted:       #6d675c;
-  --line:        #ded7ca;
-  --accent:      #d2600d;
-  --accent-2:    #e0431f;
-  --glow:        rgba(210, 96, 13, .18);
-  --scrim:       rgba(30, 26, 20, .45);
+  --ink:         #16201d;
+  --muted:       #62706b;
+  --line:        #d8e0dc;
+  /* Deep enough that the small uppercase wordmark clears 4.5:1 on paper. */
+  --accent:      #0a7a62;
+  --accent-2:    #0d6b5f;
+  --on-accent:   #ffffff;
+  --glow:        rgba(10, 122, 98, .15);
+  --scrim:       rgba(18, 30, 26, .45);
 
-  --fig-body:    #2c2926;
-  --fig-prop:    #c6bfb2;
+  --fig-body:    #26302d;
+  --fig-prop:    #b8c4bf;
   --fig-accent:  var(--accent);
 
   --card: min(54svh, 112vw, 430px);   /* the card's height; width follows 2:3 */
@@ -23,19 +25,22 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg:        #100e0a;
-    --bg-top:    #16130d;
-    --disc:      #211d15;
-    --ink:       #f3efe6;
-    --muted:     #9c9484;
-    --line:      #322c22;
-    --accent:    #f5a03f;
-    --accent-2:  #ff6a3d;
-    --glow:      rgba(245, 160, 63, .22);
-    --scrim:     rgba(0, 0, 0, .6);
+    --bg:        #0a0f0d;
+    --bg-top:    #101a17;
+    --disc:      #161d1b;
+    --ink:       #ecf1ef;
+    --muted:     #93a09b;
+    --line:      #24302c;
+    --accent:    #2fd8a0;
+    --accent-2:  #12b8a0;
+    /* The accent is light in the dark theme, so the button's own text has to
+       go dark — white on mint is about 1.6:1. */
+    --on-accent: #04231b;
+    --glow:      rgba(47, 216, 160, .17);
+    --scrim:     rgba(0, 0, 0, .62);
 
-    --fig-body:  #ece7dc;
-    --fig-prop:  #575043;
+    --fig-body:  #e8efec;
+    --fig-prop:  #4b5754;
   }
 }
 
@@ -344,7 +349,7 @@ body::before {
   border: 0;
   border-radius: 999px;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #fff;
+  color: var(--on-accent);
   font: inherit;
   font-size: 1.3rem;
   font-weight: 700;
