@@ -11,5 +11,7 @@ node rotation.test.js
 rm -rf deploy
 mkdir deploy
 cp index.html styles.css app.js stretches.js figures.js rotation.js favicon.svg deploy/
+mkdir deploy/photos
+cp photos/*.jpg deploy/photos/          # CREDITS.md is for the repo, not the site
 
 npx wrangler pages deploy deploy --project-name=daily-stretch
