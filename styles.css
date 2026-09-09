@@ -16,7 +16,7 @@
   --fig-prop:    #c6bfb2;
   --fig-accent:  var(--accent);
 
-  --arena: min(84vw, 44svh, 390px);
+  --card: min(54svh, 112vw, 430px);   /* the card's height; width follows 2:3 */
   --col: 28rem;
   --ease: cubic-bezier(.2, .8, .3, 1);
 }
@@ -139,23 +139,25 @@ body::before {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(.75rem, 3svh, 1.6rem);
+  gap: clamp(.6rem, 2.2svh, 1.2rem);
 }
 
 .arena {
   position: relative;
-  flex: 0 1 var(--arena);
+  flex: 0 1 var(--card);
   width: auto;
   height: auto;
   min-height: 0;
-  max-width: min(100%, var(--arena));
-  aspect-ratio: 1;
+  max-height: var(--card);
+  max-width: 100%;
+  aspect-ratio: var(--aspect, 10 / 11);
 }
 
-.disc {
+.art {
   position: absolute;
-  inset: 7%;
-  border-radius: 50%;
+  inset: 0;
+  border-radius: 21px;
+  overflow: hidden;
   background: var(--disc);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ink) 8%, transparent),
@@ -166,7 +168,7 @@ body::before {
   transition: transform .5s var(--ease), box-shadow .5s var(--ease);
 }
 
-[data-scene="run"] .disc {
+[data-scene="run"] .art {
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ink) 8%, transparent),
     0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent),
@@ -180,14 +182,16 @@ body::before {
   50%      { transform: scale(1.028); }
 }
 
+/* The countdown traces the card's own edge. */
 .ring {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  transform: rotate(-90deg);
+  overflow: visible;
   opacity: 0;
   transition: opacity .35s var(--ease);
+  pointer-events: none;
 }
 
 [data-scene="run"] .ring { opacity: 1; }
@@ -195,13 +199,13 @@ body::before {
 .ring-track {
   fill: none;
   stroke: var(--line);
-  stroke-width: 2.5;
+  stroke-width: 3;
 }
 
 .ring-progress {
   fill: none;
   stroke: var(--accent);
-  stroke-width: 3.5;
+  stroke-width: 4;
   stroke-linecap: round;
   filter: drop-shadow(0 0 6px var(--glow));
   transition: stroke-dashoffset .3s linear, stroke .4s var(--ease);
@@ -209,16 +213,26 @@ body::before {
 
 .ring.is-rest .ring-progress { stroke: var(--muted); filter: none; }
 
-.figure {
-  position: absolute;
-  left: 19%;
-  top: 13%;
-  width: 62%;
-  height: auto;
-  transition: opacity .35s var(--ease), transform .5s var(--ease);
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-.is-swapping .figure { opacity: 0; transform: translateY(8px) scale(.96); }
+.photo[hidden] { display: none; }
+
+.figure {
+  position: absolute;
+  left: 3%;
+  top: 50%;
+  width: 94%;
+  height: auto;
+  transform: translateY(-50%);
+  transition: opacity .35s var(--ease);
+}
+
+.is-swapping .figure { opacity: 0; }
 
 /* Figure vocabulary — every stretch drawing is built from these. */
 .fig-limb, .fig-foot, .fig-torso, .fig-hot, .fig-ground, .fig-prop, .fig-ghost, .fig-arrow {
@@ -361,6 +375,8 @@ body::before {
   align-items: center;
   gap: .55rem;
 }
+
+.control-sep[hidden] { display: none; }
 
 .control-sep {
   width: 3px;
@@ -578,12 +594,12 @@ body::before {
 
 /* Wide and short (laptop in landscape): stand the stage up side by side. */
 @media (min-width: 46rem) and (min-height: 34rem) {
-  :root { --arena: min(38vw, 52svh, 430px); }
+  :root { --card: min(62svh, 60vw, 470px); }
 }
 
 /* Phone on its side: stage on the left, controls on the right. */
 @media (orientation: landscape) and (max-height: 34rem) {
-  :root { --arena: min(30vw, 50svh, 220px); }
+  :root { --card: min(76svh, 40vw, 260px); }
 
   .app {
     grid-template-columns: 1fr 1fr;

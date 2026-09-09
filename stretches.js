@@ -6,6 +6,9 @@
  *
  * seconds  hold length for a single hold
  * perSide  true when the stretch is done left, then right (so the timer runs twice)
+ * photo    optional photograph shown in place of the drawing in figures.js:
+ *           { src, aspect } — the card takes the photo's own shape rather than
+ *           cropping it, because these poses are not all the same shape
  */
 const STRETCHES = [
   // ---------------------------------------------------------------- legs & hips
@@ -14,6 +17,7 @@ const STRETCHES = [
     name: 'Kneeling hip flexor lunge',
     area: 'Hips',
     target: 'Hip flexors, psoas, front of the hip',
+    photo: { src: 'photos/hip-flexor-lunge.jpg', aspect: '2 / 3' },
     seconds: 45,
     perSide: true,
     setup: 'Kneel on one knee with the other foot flat in front, that knee stacked over the ankle. Pad the down knee if the floor is hard.',
@@ -149,6 +153,7 @@ const STRETCHES = [
     name: 'Seated butterfly',
     area: 'Hips',
     target: 'Adductors, inner thigh and groin',
+    photo: { src: 'photos/adductor-butterfly.jpg', aspect: '3 / 2' },
     seconds: 45,
     perSide: false,
     setup: 'Sit on the floor, soles of the feet together, heels drawn in toward you.',
@@ -226,6 +231,7 @@ const STRETCHES = [
     name: 'Lying spinal twist',
     area: 'Back',
     target: 'Spine, obliques and outer hip',
+    photo: { src: 'photos/spinal-twist.jpg', aspect: '2 / 3' },
     seconds: 40,
     perSide: true,
     setup: 'Lie on your back with your arms out wide in a T.',
@@ -256,6 +262,7 @@ const STRETCHES = [
     name: 'Knees to chest',
     area: 'Back',
     target: 'Lower back and glutes',
+    photo: { src: 'photos/knees-to-chest.jpg', aspect: '3 / 2' },
     seconds: 45,
     perSide: false,
     setup: 'Lie flat on your back.',

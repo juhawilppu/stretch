@@ -126,18 +126,36 @@
   // ------------------------------------------------------------------- view
 
   var el = {};
-  ['date', 'arena', 'figure-body', 'area', 'name', 'hold', 'setup', 'steps',
+  ['date', 'arena', 'art', 'photo', 'figure', 'figure-body', 'area', 'name', 'hold', 'setup', 'steps',
    'note', 'sheet-area', 'sheet-name', 'dial-progress', 'dial-count',
    'dial-phase', 'start', 'mark-done', 'howto-open', 'howto-close', 'howto',
-   'scrim', 'streak-chip', 'streak-count', 'dots', 'streak-sub', 'finale',
+   'scrim', 'control-sep', 'streak-chip', 'streak-count', 'dots', 'streak-sub', 'finale',
    'finale-kicker', 'finale-count', 'finale-word', 'finale-sub', 'finale-close'
   ].forEach(function (id) {
     el[id] = document.getElementById(id);
   });
 
   var ring = el['dial-progress'].parentNode;
-  var RING = 2 * Math.PI * 54;
-  el['dial-progress'].style.strokeDasharray = RING;
+  var RING = 0;
+
+  /* Drawings sit in a nearly square card; a photograph gets one its own shape.
+     The countdown traces the card's edge, so the ring has to be rebuilt to
+     match whenever that shape changes. */
+  var DRAWING_ASPECT = '10 / 11';
+
+  function shapeCard(aspect) {
+    el.arena.style.setProperty('--aspect', aspect);
+
+    var parts = aspect.split('/');
+    var h = 200 * (parseFloat(parts[1]) / parseFloat(parts[0]));
+    ring.setAttribute('viewBox', '0 0 200 ' + h);
+    ring.querySelectorAll('rect').forEach(function (r) {
+      r.setAttribute('height', h - 4);
+    });
+
+    RING = el['dial-progress'].getTotalLength();
+    el['dial-progress'].style.strokeDasharray = RING;
+  }
 
   function scene(name) { document.body.dataset.scene = name; }
 
@@ -164,7 +182,22 @@
     stretch = pickForDay(dayNumber(now), STRETCHES);
 
     el.date.textContent = formatDate(now) + (override ? ' · preview' : '');
-    el['figure-body'].innerHTML = FIGURES[stretch.id] || '';
+
+    if (stretch.photo) {
+      el.photo.src = stretch.photo.src;
+      el.photo.alt = stretch.name;
+      el.photo.hidden = false;
+      el.figure.hidden = true;
+      el['figure-body'].innerHTML = '';
+      shapeCard(stretch.photo.aspect);
+    } else {
+      el.photo.hidden = true;
+      el.photo.removeAttribute('src');
+      el.figure.hidden = false;
+      el['figure-body'].innerHTML = FIGURES[stretch.id] || '';
+      shapeCard(DRAWING_ASPECT);
+    }
+
     el.area.textContent = stretch.area + ' · ' + stretch.target;
     el.name.textContent = stretch.name;
     el.hold.textContent = holdLabel(stretch);
@@ -214,6 +247,7 @@
     }
 
     el['mark-done'].hidden = doneToday;
+    el['control-sep'].hidden = doneToday;     // no dangling separator
     if (!running) {
       el.start.textContent = doneToday ? 'Go again' : 'Start';
       el.start.classList.toggle('is-done', doneToday);
