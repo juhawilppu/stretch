@@ -96,12 +96,13 @@ body {
 }
 
 /* Figure vocabulary — every stretch drawing is built from these. */
-.fig-limb, .fig-torso, .fig-hot, .fig-ground, .fig-prop, .fig-ghost, .fig-arrow {
+.fig-limb, .fig-foot, .fig-torso, .fig-hot, .fig-ground, .fig-prop, .fig-ghost, .fig-arrow {
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 .fig-limb      { stroke: var(--fig-body);   stroke-width: 8.5; }
+.fig-foot      { stroke: var(--fig-body);   stroke-width: 6.5; }
 .fig-torso     { stroke: var(--fig-body);   stroke-width: 12; }
 .fig-head      { fill:   var(--fig-body); }
 .fig-nose      { fill:   var(--surface); }

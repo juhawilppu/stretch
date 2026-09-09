@@ -19,8 +19,8 @@ const FIGURES = {
     <path class="fig-limb" d="M46 200 H74"/>
     <path class="fig-limb" d="M46 200 L40 190"/>
     <path class="fig-limb" d="M74 200 L102 142"/>
-    <path class="fig-limb" d="M102 142 L140 166 L142 200"/>
-    <path class="fig-limb" d="M132 200 H156"/>
+    <path class="fig-limb" d="M102 142 L140 166 L142 193"/>
+    <path class="fig-foot" d="M142 193 L153 200"/>
     <path class="fig-torso" d="M102 142 L100 92"/>
     <path class="fig-limb" d="M100 92 L114 124 L136 158"/>
     <circle class="fig-head" cx="100" cy="76" r="11"/>
@@ -34,8 +34,8 @@ const FIGURES = {
     <path class="fig-limb" d="M48 198 L44 132"/>
     <path class="fig-limb" d="M44 132 L44 122"/>
     <path class="fig-limb" d="M48 198 L92 160"/>
-    <path class="fig-limb" d="M92 160 L134 180 L136 200"/>
-    <path class="fig-limb" d="M126 200 H150"/>
+    <path class="fig-limb" d="M92 160 L134 180 L136 193"/>
+    <path class="fig-foot" d="M136 193 L147 200"/>
     <path class="fig-torso" d="M92 160 L92 104"/>
     <path class="fig-limb" d="M92 104 L106 134 L130 174"/>
     <circle class="fig-head" cx="92" cy="88" r="11"/>
@@ -45,8 +45,8 @@ const FIGURES = {
   'standing-quad': `
     <line class="fig-ground" x1="16" y1="200" x2="184" y2="200"/>
     <path class="fig-prop" d="M170 66 V200"/>
-    <path class="fig-limb" d="M98 134 L98 168 L98 200"/>
-    <path class="fig-limb" d="M90 200 H112"/>
+    <path class="fig-limb" d="M98 134 L98 168 L98 193"/>
+    <path class="fig-foot" d="M98 193 L109 200"/>
     <path class="fig-limb" d="M96 134 L86 168 L64 146"/>
     <path class="fig-limb" d="M64 146 L54 142"/>
     <path class="fig-torso" d="M97 134 L99 86"/>
@@ -59,8 +59,8 @@ const FIGURES = {
   'standing-hamstring': `
     <line class="fig-ground" x1="16" y1="200" x2="184" y2="200"/>
     <path class="fig-prop" d="M128 200 V168 H180"/>
-    <path class="fig-limb" d="M84 138 L84 170 L84 200"/>
-    <path class="fig-limb" d="M76 200 H98"/>
+    <path class="fig-limb" d="M84 138 L84 170 L84 193"/>
+    <path class="fig-foot" d="M84 193 L95 200"/>
     <path class="fig-limb" d="M84 138 L112 154 L140 168"/>
     <path class="fig-limb" d="M140 168 L148 156"/>
     <path class="fig-torso" d="M84 138 L106 102"/>
@@ -101,10 +101,10 @@ const FIGURES = {
     <path class="fig-torso" d="M84 140 L108 98"/>
     <circle class="fig-head" cx="118" cy="84" r="11"/>
     <path class="fig-limb" d="M108 98 L136 96 L168 96"/>
-    <path class="fig-limb" d="M84 140 L114 166 L120 200"/>
-    <path class="fig-limb" d="M110 200 H134"/>
-    <path class="fig-limb" d="M84 140 L66 170 L48 200"/>
-    <path class="fig-limb" d="M42 200 H66"/>
+    <path class="fig-limb" d="M84 140 L114 166 L120 193"/>
+    <path class="fig-foot" d="M120 193 L131 200"/>
+    <path class="fig-limb" d="M84 140 L66 170 L48 193"/>
+    <path class="fig-foot" d="M48 193 L59 200"/>
     <path class="fig-hot" d="M65 172 L50 197"/>
   `,
 
@@ -114,10 +114,10 @@ const FIGURES = {
     <path class="fig-torso" d="M96 142 L116 100"/>
     <circle class="fig-head" cx="126" cy="86" r="11"/>
     <path class="fig-limb" d="M116 100 L142 98 L168 98"/>
-    <path class="fig-limb" d="M96 142 L126 168 L132 200"/>
-    <path class="fig-limb" d="M122 200 H146"/>
-    <path class="fig-limb" d="M96 142 L80 174 L64 200"/>
-    <path class="fig-limb" d="M58 200 H82"/>
+    <path class="fig-limb" d="M96 142 L126 168 L132 193"/>
+    <path class="fig-foot" d="M132 193 L143 200"/>
+    <path class="fig-limb" d="M96 142 L80 174 L64 193"/>
+    <path class="fig-foot" d="M64 193 L75 200"/>
     <path class="fig-hot" d="M74 184 L65 198"/>
     <path class="fig-arrow" d="M92 176 Q80 186 72 194" marker-end="url(#fig-arrowhead)"/>
   `,
@@ -129,10 +129,10 @@ const FIGURES = {
     <circle class="fig-head" cx="118" cy="72" r="11"/>
     <path class="fig-limb" d="M112 88 L84 92 L40 94"/>
     <path class="fig-limb" d="M112 88 L128 112 L112 136"/>
-    <path class="fig-limb" d="M90 142 L100 170 L112 200"/>
-    <path class="fig-limb" d="M104 200 H126"/>
-    <path class="fig-limb" d="M84 140 L76 170 L70 200"/>
-    <path class="fig-limb" d="M60 200 H82"/>
+    <path class="fig-limb" d="M90 142 L100 170 L112 193"/>
+    <path class="fig-foot" d="M112 193 L123 200"/>
+    <path class="fig-limb" d="M84 140 L76 170 L70 193"/>
+    <path class="fig-foot" d="M70 193 L81 200"/>
     <path class="fig-hot" d="M83 143 L76 170 L70 196"/>
     <path class="fig-arrow" d="M62 132 Q50 132 42 134" marker-end="url(#fig-arrowhead)"/>
   `,
@@ -152,10 +152,10 @@ const FIGURES = {
   'knee-to-wall': `
     <line class="fig-ground" x1="16" y1="200" x2="184" y2="200"/>
     <path class="fig-prop" d="M158 58 V200"/>
-    <path class="fig-limb" d="M96 138 L152 172 L120 200"/>
-    <path class="fig-limb" d="M110 200 H136"/>
-    <path class="fig-limb" d="M96 138 L82 168 L72 200"/>
-    <path class="fig-limb" d="M64 200 H86"/>
+    <path class="fig-limb" d="M96 138 L152 172 L120 193"/>
+    <path class="fig-foot" d="M120 193 L131 200"/>
+    <path class="fig-limb" d="M96 138 L82 168 L72 193"/>
+    <path class="fig-foot" d="M72 193 L83 200"/>
     <path class="fig-torso" d="M96 138 L102 92"/>
     <circle class="fig-head" cx="106" cy="76" r="11"/>
     <path class="fig-limb" d="M102 92 L126 96 L152 100"/>
@@ -165,10 +165,10 @@ const FIGURES = {
 
   'wide-fold': `
     <line class="fig-ground" x1="16" y1="198" x2="184" y2="198"/>
-    <path class="fig-limb" d="M92 126 L64 162 L48 198"/>
-    <path class="fig-limb" d="M38 198 H60"/>
-    <path class="fig-limb" d="M108 126 L136 162 L152 198"/>
-    <path class="fig-limb" d="M140 198 H162"/>
+    <path class="fig-limb" d="M92 126 L64 162 L48 191"/>
+    <path class="fig-foot" d="M48 191 L59 198"/>
+    <path class="fig-limb" d="M108 126 L136 162 L152 191"/>
+    <path class="fig-foot" d="M152 191 L163 198"/>
     <path class="fig-torso" d="M100 124 V154"/>
     <circle class="fig-head" cx="100" cy="176" r="11"/>
     <path class="fig-limb" d="M100 152 L74 168 L64 194"/>
@@ -198,8 +198,8 @@ const FIGURES = {
     <path class="fig-prop" d="M60 160 V106"/>
     <path class="fig-prop" d="M68 160 V204"/>
     <path class="fig-prop" d="M138 160 V204"/>
-    <path class="fig-limb" d="M80 152 H128 L130 196"/>
-    <path class="fig-limb" d="M122 196 H146"/>
+    <path class="fig-limb" d="M80 152 H128 L130 189"/>
+    <path class="fig-foot" d="M130 189 L141 196"/>
     <path class="fig-torso" d="M80 152 Q77 124 63 104"/>
     <path class="fig-hot" d="M78 140 Q74 120 63 106"/>
     <circle class="fig-head" cx="53" cy="90" r="11"/>
@@ -247,10 +247,10 @@ const FIGURES = {
 
   'standing-extension': `
     <line class="fig-ground" x1="16" y1="200" x2="184" y2="200"/>
-    <path class="fig-limb" d="M92 140 L84 170 L80 200"/>
-    <path class="fig-limb" d="M70 200 H92"/>
-    <path class="fig-limb" d="M100 140 L108 170 L112 200"/>
-    <path class="fig-limb" d="M102 200 H124"/>
+    <path class="fig-limb" d="M92 140 L84 170 L80 193"/>
+    <path class="fig-foot" d="M80 193 L91 200"/>
+    <path class="fig-limb" d="M100 140 L108 170 L112 193"/>
+    <path class="fig-foot" d="M112 193 L123 200"/>
     <path class="fig-torso" d="M96 140 L84 90"/>
     <circle class="fig-head" cx="79" cy="73" r="11"/>
     <path class="fig-limb" d="M84 90 L104 114 L100 138"/>
@@ -267,10 +267,10 @@ const FIGURES = {
     <circle class="fig-head" cx="100" cy="74" r="11"/>
     <path class="fig-limb" d="M100 94 L62 98 L56 66"/>
     <path class="fig-limb" d="M100 94 L138 98 L144 66"/>
-    <path class="fig-limb" d="M96 142 L86 170 L82 200"/>
-    <path class="fig-limb" d="M72 200 H94"/>
-    <path class="fig-limb" d="M104 142 L114 170 L118 200"/>
-    <path class="fig-limb" d="M108 200 H130"/>
+    <path class="fig-limb" d="M96 142 L86 170 L82 193"/>
+    <path class="fig-foot" d="M82 193 L93 200"/>
+    <path class="fig-limb" d="M104 142 L114 170 L118 193"/>
+    <path class="fig-foot" d="M118 193 L129 200"/>
     <path class="fig-hot" d="M74 100 Q100 118 126 100"/>
   `,
 
@@ -307,10 +307,10 @@ const FIGURES = {
     <path class="fig-torso" d="M116 104 L72 132"/>
     <circle class="fig-head" cx="132" cy="94" r="11"/>
     <path class="fig-limb" d="M116 104 L96 126 L78 132"/>
-    <path class="fig-limb" d="M72 132 L76 168 L72 200"/>
-    <path class="fig-limb" d="M62 200 H84"/>
-    <path class="fig-limb" d="M72 136 L86 170 L84 200"/>
-    <path class="fig-limb" d="M76 200 H98"/>
+    <path class="fig-limb" d="M72 132 L76 168 L72 193"/>
+    <path class="fig-foot" d="M72 193 L83 200"/>
+    <path class="fig-limb" d="M72 136 L86 170 L84 193"/>
+    <path class="fig-foot" d="M84 193 L95 200"/>
     <path class="fig-hot" d="M114 112 L78 136"/>
     <path class="fig-arrow" d="M62 116 Q46 118 36 124" marker-end="url(#fig-arrowhead)"/>
   `,
