@@ -3,6 +3,10 @@
  *
  * One stretch per day, decided by the date rather than by chance, so reloading
  * the page never rerolls it and every stretch comes up once before any repeats.
+ *
+ * The screen is a fixed, non-scrolling stage with two scenes: `brief` (what
+ * today's stretch is) and `run` (the countdown). Everything else — the
+ * instructions, the celebration — arrives as an overlay on top of it.
  */
 (function () {
   'use strict';
@@ -122,14 +126,20 @@
   // ------------------------------------------------------------------- view
 
   var el = {};
-  ['date', 'figure-body', 'area', 'name', 'hold', 'setup', 'steps', 'dial',
-   'dial-progress', 'dial-count', 'dial-phase', 'start', 'mark-done', 'note',
-   'streak-count', 'streak-word', 'dots', 'streak-sub'].forEach(function (id) {
+  ['date', 'arena', 'figure-body', 'area', 'name', 'hold', 'setup', 'steps',
+   'note', 'sheet-area', 'sheet-name', 'dial-progress', 'dial-count',
+   'dial-phase', 'start', 'mark-done', 'howto-open', 'howto-close', 'howto',
+   'scrim', 'streak-chip', 'streak-count', 'dots', 'streak-sub', 'finale',
+   'finale-kicker', 'finale-count', 'finale-word', 'finale-sub', 'finale-close'
+  ].forEach(function (id) {
     el[id] = document.getElementById(id);
   });
 
+  var ring = el['dial-progress'].parentNode;
   var RING = 2 * Math.PI * 54;
   el['dial-progress'].style.strokeDasharray = RING;
+
+  function scene(name) { document.body.dataset.scene = name; }
 
   /** A preview override (?date=YYYY-MM-DD) never writes to the streak. */
   var override = null;
@@ -145,7 +155,7 @@
   var shownDay = null;
 
   function holdLabel(s) {
-    return s.perSide ? s.seconds + ' seconds each side' : s.seconds + ' seconds';
+    return s.perSide ? s.seconds + 's each side' : s.seconds + ' seconds';
   }
 
   function renderStretch() {
@@ -153,11 +163,14 @@
     shownDay = dayKey(now);
     stretch = pickForDay(dayNumber(now), STRETCHES);
 
-    el.date.textContent = formatDate(now) + (override ? ' (preview)' : '');
+    el.date.textContent = formatDate(now) + (override ? ' · preview' : '');
     el['figure-body'].innerHTML = FIGURES[stretch.id] || '';
     el.area.textContent = stretch.area + ' · ' + stretch.target;
     el.name.textContent = stretch.name;
     el.hold.textContent = holdLabel(stretch);
+
+    el['sheet-area'].textContent = stretch.area + ' · ' + stretch.target;
+    el['sheet-name'].textContent = stretch.name;
     el.setup.textContent = stretch.setup;
     el.note.textContent = stretch.note;
 
@@ -173,6 +186,13 @@
     renderStreak();
   }
 
+  function streakSub(state, streak, doneToday) {
+    if (streak === 0) return 'Do today’s stretch and the chain begins.';
+    if (!doneToday)   return 'Today is not marked yet — don’t break the chain.';
+    if (state.streak >= state.longest) return 'That is your best run yet.';
+    return 'Best run so far: ' + state.longest + ' days.';
+  }
+
   function renderStreak() {
     var now = today();
     var state = loadState();
@@ -180,17 +200,8 @@
     var doneToday = state.last === dayKey(now);
 
     el['streak-count'].textContent = streak;
-    el['streak-word'].textContent = streak === 1 ? 'day in a row' : 'days in a row';
-
-    if (streak === 0) {
-      el['streak-sub'].textContent = 'Do today’s stretch and the chain begins.';
-    } else if (!doneToday) {
-      el['streak-sub'].textContent = 'Today is not marked yet — don’t break the chain.';
-    } else if (state.streak >= state.longest) {
-      el['streak-sub'].textContent = 'That is your best run yet.';
-    } else {
-      el['streak-sub'].textContent = 'Best run so far: ' + state.longest + ' days.';
-    }
+    el['streak-chip'].classList.toggle('is-live', streak > 0);
+    el['streak-sub'].textContent = streakSub(state, streak, doneToday);
 
     el.dots.innerHTML = '';
     for (var i = DOT_DAYS - 1; i >= 0; i--) {
@@ -203,16 +214,62 @@
     }
 
     el['mark-done'].hidden = doneToday;
-    if (doneToday && !running) {
-      el.start.textContent = 'Done today — go again?';
-      el.start.classList.add('is-done');
+    if (!running) {
+      el.start.textContent = doneToday ? 'Go again' : 'Start';
+      el.start.classList.toggle('is-done', doneToday);
     }
   }
 
+  /** Records today and returns true when that was a fresh completion. */
   function complete() {
-    if (override) { renderStreak(); return; }   // preview mode never writes
-    saveState(markDone(loadState(), today()));
+    var state = loadState();
+    var fresh = state.last !== dayKey(today());
+    if (!override) saveState(markDone(state, today()));
     renderStreak();
+    return fresh && !override;
+  }
+
+  // ------------------------------------------------------------ how-to sheet
+
+  function openSheet() {
+    el.scrim.hidden = false;
+    el.howto.hidden = false;
+    requestAnimationFrame(function () {
+      el.scrim.classList.add('is-open');
+      el.howto.classList.add('is-open');
+    });
+  }
+
+  function closeSheet() {
+    el.scrim.classList.remove('is-open');
+    el.howto.classList.remove('is-open');
+    setTimeout(function () {
+      el.scrim.hidden = true;
+      el.howto.hidden = true;
+    }, 380);
+  }
+
+  // ---------------------------------------------------------------- finale
+
+  function openFinale() {
+    var state = loadState();
+    var streak = currentStreak(state, today());
+    var doneToday = state.last === dayKey(today());
+
+    el['finale-count'].textContent = streak;
+    el['finale-word'].textContent = streak === 1 ? 'day in a row' : 'days in a row';
+    el['finale-kicker'].textContent = override ? 'Preview' : 'Held it.';
+    el['finale-sub'].textContent = override
+      ? 'Preview day — your streak is untouched.'
+      : streakSub(state, streak, doneToday);
+
+    el.finale.hidden = false;
+    requestAnimationFrame(function () { el.finale.classList.add('is-open'); });
+  }
+
+  function closeFinale() {
+    el.finale.classList.remove('is-open');
+    setTimeout(function () { el.finale.hidden = true; }, 300);
   }
 
   // ------------------------------------------------------------------ timer
@@ -236,17 +293,16 @@
     running = false;
     if (ticker) { clearInterval(ticker); ticker = null; }
     releaseAwake();
-    el.dial.hidden = true;
-    el.dial.classList.remove('is-rest');
-    el.start.textContent = 'Start';
-    el.start.classList.remove('is-done');
+    scene('brief');
+    ring.classList.remove('is-rest');
+    el.start.classList.remove('is-running');
   }
 
   function startPhase(i) {
     phaseIndex = i;
     var phase = phases[i];
     deadline = Date.now() + phase.secs * 1000;
-    el.dial.classList.toggle('is-rest', !!phase.rest);
+    ring.classList.toggle('is-rest', !!phase.rest);
     el['dial-phase'].textContent = phase.label;
     paint(phase.secs, phase.secs);
   }
@@ -271,6 +327,7 @@
       chime('done');
       resetTimer();
       complete();
+      openFinale();
     }
   }
 
@@ -278,20 +335,42 @@
     chime('rest');                     // also unlocks audio on the user gesture
     phases = buildPhases(stretch);
     running = true;
-    el.dial.hidden = false;
+    scene('run');
     el.start.textContent = 'Stop';
+    el.start.classList.add('is-running');
     el.start.classList.remove('is-done');
     keepAwake();
     startPhase(0);
     ticker = setInterval(tick, 100);
   }
 
-  el.start.addEventListener('click', function () {
+  function toggle() {
     if (running) { resetTimer(); renderStreak(); } else { start(); }
-  });
+  }
+
+  el.start.addEventListener('click', toggle);
 
   el['mark-done'].addEventListener('click', function () {
-    complete();
+    if (complete()) openFinale();
+  });
+
+  el['howto-open'].addEventListener('click', openSheet);
+  el['howto-close'].addEventListener('click', closeSheet);
+  el.scrim.addEventListener('click', closeSheet);
+  el['finale-close'].addEventListener('click', closeFinale);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if (!el.finale.hidden) closeFinale();
+      else if (!el.howto.hidden) closeSheet();
+      return;
+    }
+    // Space starts and stops, unless a button already has the focus.
+    if (e.key === ' ' && el.howto.hidden && el.finale.hidden &&
+        document.activeElement === document.body) {
+      e.preventDefault();
+      toggle();
+    }
   });
 
   // Re-acquire the screen lock after the tab comes back, and roll over at midnight.

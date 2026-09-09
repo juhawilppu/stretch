@@ -17,6 +17,9 @@ long to hold it, then counts the hold down for you and keeps the streak.
 - **A countdown timer.** Two-sided stretches run left, a switch-sides beat, then
   right, with a chime at each change, and the screen is kept awake while it runs.
 - **A streak**, stored in your own browser. Nothing is sent anywhere.
+- **One fixed screen.** The stretch sits lit on a stage and the page never
+  scrolls: the instructions come up as a sheet, and finishing a hold takes the
+  whole screen over with the streak.
 
 ## The rotation
 
