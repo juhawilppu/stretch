@@ -84,5 +84,11 @@ the README and the tests stay off the published site — and uploads it to the
 `daily-stretch` project. `deploy/` is generated, so it is gitignored rather than
 committed.
 
+Every asset URL is stamped with the commit on the way out. Cloudflare serves
+`index.html` with `max-age=0` but scripts, styles and photographs with a four
+hour TTL, so without the stamp a returning visitor spends four hours pairing a
+fresh `index.html` with stale scripts — which breaks the page rather than merely
+dating it.
+
 Pushing to `master` does **not** publish: the project is direct-upload rather
 than wired to the repo, so deploying is always an explicit `./deploy.sh`.
