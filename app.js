@@ -1,8 +1,8 @@
 /**
  * Daily Stretch
  *
- * One stretch per day, decided by the date rather than by chance, so reloading
- * the page never rerolls it and every stretch comes up once before any repeats.
+ * One stretch a day, drawn at random from a list of three. The streak is what
+ * counts the days; the stretch itself is just whichever one comes up.
  *
  * The screen is a fixed, non-scrolling stage with two scenes: `brief` (what
  * today's stretch is) and `run` (the countdown). Everything else — the
@@ -17,11 +17,10 @@
 
   // ------------------------------------------------------------------ dates
 
-  var dayKey     = Rotation.dayKey;
-  var parseKey   = Rotation.parseKey;
-  var dayNumber  = Rotation.dayNumber;
-  var addDays    = Rotation.addDays;
-  var pickForDay = Rotation.pickForDay;
+  var dayKey    = Days.dayKey;
+  var parseKey  = Days.parseKey;
+  var dayNumber = Days.dayNumber;
+  var addDays   = Days.addDays;
 
   function formatDate(d) {
     try {
@@ -126,10 +125,10 @@
   // ------------------------------------------------------------------- view
 
   var el = {};
-  ['date', 'arena', 'art', 'photo', 'figure', 'figure-body', 'area', 'name', 'hold', 'setup', 'steps',
+  ['date', 'arena', 'art', 'photo', 'area', 'name', 'hold', 'setup', 'steps',
    'note', 'sheet-area', 'sheet-name', 'dial-progress', 'dial-count',
    'dial-phase', 'start', 'mark-done', 'howto-open', 'howto-close', 'howto',
-   'scrim', 'control-sep', 'streak-chip', 'streak-count', 'dots', 'streak-sub', 'finale',
+   'scrim', 'control-sep', 'reroll', 'reroll-sep', 'streak-chip', 'streak-count', 'dots', 'streak-sub', 'finale',
    'finale-kicker', 'finale-count', 'finale-word', 'finale-sub', 'finale-close'
   ].forEach(function (id) {
     el[id] = document.getElementById(id);
@@ -138,11 +137,9 @@
   var ring = el['dial-progress'].parentNode;
   var RING = 0;
 
-  /* Drawings sit in a nearly square card; a photograph gets one its own shape.
-     The countdown traces the card's edge, so the ring has to be rebuilt to
-     match whenever that shape changes. */
-  var DRAWING_ASPECT = '10 / 11';
-
+  /* Each photograph gets a card of its own shape rather than being cropped to a
+     common one. The countdown traces that card's edge, so the ring has to be
+     rebuilt to match whenever the shape changes. */
   function shapeCard(aspect) {
     el.arena.style.setProperty('--aspect', aspect);
 
@@ -159,44 +156,43 @@
 
   function scene(name) { document.body.dataset.scene = name; }
 
-  /** A preview override (?date=YYYY-MM-DD) never writes to the streak. */
-  var override = null;
-  var match = /[?&]date=(\d{4}-\d{2}-\d{2})/.exec(window.location.search);
-  if (match) {
-    var d = parseKey(match[1]);
-    if (!isNaN(d.getTime())) override = d;
+  function today() { return new Date(); }
+
+  /* Running from a checkout rather than the published site. The stretch is drawn
+     at random on load, which is awkward when you want a particular one on screen
+     to look at, so local runs get a Shuffle button. */
+  var LOCAL = window.location.protocol === 'file:' ||
+              /^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(window.location.hostname);
+
+  el.reroll.hidden = !LOCAL;
+  el['reroll-sep'].hidden = !LOCAL;
+
+  /* Chrome will hold on to a photograph it cached before the file on disk was
+     replaced, and a plain reload does not always shift it — a local run can go
+     on showing the old picture indefinitely. Locally, ask for a fresh copy every
+     time; the published site keeps clean, cacheable URLs. */
+  function photoSrc(s) {
+    return LOCAL ? s.photo.src + '?v=' + Date.now() : s.photo.src;
   }
 
-  function today() { return override || new Date(); }
+  /** Never deals `avoid` again, so every press of Shuffle changes the screen. */
+  function pickStretch(avoid) {
+    var pool = STRETCHES.filter(function (s) { return s !== avoid; });
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
 
   var stretch = null;
-  var shownDay = null;
 
   function holdLabel(s) {
     return s.perSide ? s.seconds + 's each side' : s.seconds + ' seconds';
   }
 
-  function renderStretch() {
-    var now = today();
-    shownDay = dayKey(now);
-    stretch = pickForDay(dayNumber(now), STRETCHES);
+  function renderStretch(avoid) {
+    stretch = pickStretch(avoid);
 
-    el.date.textContent = formatDate(now) + (override ? ' · preview' : '');
-
-    if (stretch.photo) {
-      el.photo.src = stretch.photo.src;
-      el.photo.alt = stretch.name;
-      el.photo.hidden = false;
-      el.figure.hidden = true;
-      el['figure-body'].innerHTML = '';
-      shapeCard(stretch.photo.aspect);
-    } else {
-      el.photo.hidden = true;
-      el.photo.removeAttribute('src');
-      el.figure.hidden = false;
-      el['figure-body'].innerHTML = FIGURES[stretch.id] || '';
-      shapeCard(DRAWING_ASPECT);
-    }
+    el.photo.src = photoSrc(stretch);
+    el.photo.alt = stretch.name;
+    shapeCard(stretch.photo.aspect);
 
     el.area.textContent = stretch.area + ' · ' + stretch.target;
     el.name.textContent = stretch.name;
@@ -226,8 +222,14 @@
     return 'Best run so far: ' + state.longest + ' days.';
   }
 
+  var shownDay = null;
+
+  /** Everything that depends on what day it is, so a page left open can roll over. */
   function renderStreak() {
     var now = today();
+    shownDay = dayKey(now);
+    el.date.textContent = formatDate(now);
+
     var state = loadState();
     var streak = currentStreak(state, now);
     var doneToday = state.last === dayKey(now);
@@ -258,9 +260,9 @@
   function complete() {
     var state = loadState();
     var fresh = state.last !== dayKey(today());
-    if (!override) saveState(markDone(state, today()));
+    saveState(markDone(state, today()));
     renderStreak();
-    return fresh && !override;
+    return fresh;
   }
 
   // ------------------------------------------------------------ how-to sheet
@@ -292,10 +294,8 @@
 
     el['finale-count'].textContent = streak;
     el['finale-word'].textContent = streak === 1 ? 'day in a row' : 'days in a row';
-    el['finale-kicker'].textContent = override ? 'Preview' : 'Held it.';
-    el['finale-sub'].textContent = override
-      ? 'Preview day — your streak is untouched.'
-      : streakSub(state, streak, doneToday);
+    el['finale-kicker'].textContent = 'Held it.';
+    el['finale-sub'].textContent = streakSub(state, streak, doneToday);
 
     el.finale.hidden = false;
     requestAnimationFrame(function () { el.finale.classList.add('is-open'); });
@@ -388,6 +388,8 @@
     if (complete()) openFinale();
   });
 
+  el.reroll.addEventListener('click', function () { renderStretch(stretch); });
+
   el['howto-open'].addEventListener('click', openSheet);
   el['howto-close'].addEventListener('click', closeSheet);
   el.scrim.addEventListener('click', closeSheet);
@@ -407,15 +409,15 @@
     }
   });
 
-  // Re-acquire the screen lock after the tab comes back, and roll over at midnight.
+  // Re-acquire the screen lock after the tab comes back, and roll the day over at midnight.
   document.addEventListener('visibilitychange', function () {
     if (document.visibilityState !== 'visible') return;
     if (running) keepAwake();
-    if (dayKey(today()) !== shownDay) renderStretch();
+    if (dayKey(today()) !== shownDay) renderStreak();
   });
 
   setInterval(function () {
-    if (!running && dayKey(today()) !== shownDay) renderStretch();
+    if (!running && dayKey(today()) !== shownDay) renderStreak();
   }, 60000);
 
   renderStretch();

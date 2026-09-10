@@ -14,10 +14,6 @@
   --glow:        rgba(10, 122, 98, .15);
   --scrim:       rgba(18, 30, 26, .45);
 
-  --fig-body:    #26302d;
-  --fig-prop:    #b8c4bf;
-  --fig-accent:  var(--accent);
-
   --card: min(54svh, 112vw, 430px);   /* the card's height; width follows 2:3 */
   --col: 28rem;
   --ease: cubic-bezier(.2, .8, .3, 1);
@@ -38,9 +34,6 @@
     --on-accent: #04231b;
     --glow:      rgba(47, 216, 160, .17);
     --scrim:     rgba(0, 0, 0, .62);
-
-    --fig-body:  #e8efec;
-    --fig-prop:  #4b5754;
   }
 }
 
@@ -70,7 +63,7 @@ body {
   text-wrap: pretty;
 }
 
-/* The room: a warm wash at the top, a pool of light around the figure. */
+/* The room: a warm wash at the top, a pool of light around the photograph. */
 body::before {
   content: "";
   position: fixed;
@@ -218,49 +211,13 @@ body::before {
 
 .ring.is-rest .ring-progress { stroke: var(--muted); filter: none; }
 
+/* The card is cut to the photograph's own shape, so nothing needs cropping out. */
 .photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-
-.photo[hidden] { display: none; }
-
-.figure {
-  position: absolute;
-  left: 3%;
-  top: 50%;
-  width: 94%;
-  height: auto;
-  transform: translateY(-50%);
-  transition: opacity .35s var(--ease);
-}
-
-.is-swapping .figure { opacity: 0; }
-
-/* Figure vocabulary — every stretch drawing is built from these. */
-.fig-limb, .fig-foot, .fig-torso, .fig-hot, .fig-ground, .fig-prop, .fig-ghost, .fig-arrow {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.fig-limb      { stroke: var(--fig-body);   stroke-width: 8.5; }
-.fig-foot      { stroke: var(--fig-body);   stroke-width: 6.5; }
-.fig-torso     { stroke: var(--fig-body);   stroke-width: 12; }
-.fig-head      { fill:   var(--fig-body); }
-.fig-nose      { fill:   var(--disc); }
-.fig-hot       { stroke: var(--fig-accent); stroke-width: 8.5; }
-/* Laid under a limb that passes in front of another, so the two read as
-   overlapping rather than merging into one shape. */
-.fig-knockout  { fill: none; stroke: var(--disc); stroke-width: 19;
-                 stroke-linecap: round; stroke-linejoin: round; }
-.fig-ground    { stroke: var(--fig-prop);   stroke-width: 3;  stroke-linecap: round; }
-.fig-prop      { stroke: var(--fig-prop);   stroke-width: 4; }
-.fig-ghost     { stroke: var(--fig-prop);   stroke-width: 5;  stroke-dasharray: 3 8; }
-.fig-ghost-head{ fill: none; stroke: var(--fig-prop); stroke-width: 3; stroke-dasharray: 3 7; }
-.fig-arrow     { stroke: var(--fig-accent); stroke-width: 3; }
-.fig-arrowhead { fill:   var(--fig-accent); stroke: none; }
 
 /* ----------------------------------------------------------------- caption */
 

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Daily Stretch</title>
-<meta name="description" content="One stretch a day. Today's pick, how to do it, and how long to hold it.">
+<meta name="description" content="One stretch a day. Three moves, one picked at random, and a timer that counts the hold down.">
 <meta name="theme-color" content="#eaefec" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0a0f0d" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,17 +31,7 @@
   <main class="stage">
     <div class="arena" id="arena">
       <div class="art" id="art">
-        <img class="photo" id="photo" alt="" hidden>
-        <svg class="figure" id="figure" viewBox="0 0 200 220" role="img" aria-labelledby="figure-title">
-          <title id="figure-title">Illustration of today's stretch</title>
-          <defs>
-            <marker id="fig-arrowhead" viewBox="0 0 10 10" refX="7" refY="5"
-                    markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-              <path d="M0 1 L9 5 L0 9 z" class="fig-arrowhead"/>
-            </marker>
-          </defs>
-          <g id="figure-body"></g>
-        </svg>
+        <img class="photo" id="photo" alt="">
       </div>
 
       <svg class="ring" viewBox="0 0 200 300" aria-hidden="true">
@@ -68,6 +58,8 @@
       <button class="btn-ghost" id="howto-open" type="button">How to do it</button>
       <span class="control-sep" id="control-sep" aria-hidden="true"></span>
       <button class="btn-ghost" id="mark-done" type="button">Mark today done</button>
+      <span class="control-sep" id="reroll-sep" hidden aria-hidden="true"></span>
+      <button class="btn-ghost" id="reroll" type="button" hidden>Shuffle</button>
     </div>
     <div class="chain" id="dots" aria-hidden="true"></div>
     <p class="streak-sub" id="streak-sub"></p>
@@ -101,8 +93,7 @@
 </section>
 
 <script src="stretches.js"></script>
-<script src="figures.js"></script>
-<script src="rotation.js"></script>
+<script src="days.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
