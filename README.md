@@ -115,8 +115,16 @@ holding anyway:
 
 That fires every time you get home, whether or not the stretch is done, because
 nothing on the phone can see into the app's storage to check. Making it fire only
-when the day is unmarked needs a server: the app tells it when a day is finished,
-the automation asks it on arrival, and it pushes only when the answer is no.
+on an unmarked day would take a server — the app reporting each finished day, the
+automation asking on arrival, a push when the answer is no — and that is the
+trade this app declines. The streak is one line in one browser's storage and it
+has never left the phone; a reminder that knows whether you have stretched is a
+reminder that knows when you are home, kept on someone else's computer. An extra
+notification on a day you have already done it is the cheaper price.
+
+If the Shortcuts app lists the web app under **Open App**, that action works too
+and skips the tap. It is a home screen web app rather than an installed one, so
+whether it appears depends on the iOS version.
 
 ## Deploying
 
