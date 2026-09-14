@@ -1,0 +1,8 @@
+# Cloudflare Pages serves scripts with a four hour TTL, which is right for the
+# stamped ones and wrong for these two: the worker is how updates arrive at an
+# installed app, and the manifest is read at install time. Both are unstamped,
+# so they have to be revalidated rather than held.
+/sw.js
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Cache-Control: no-cache

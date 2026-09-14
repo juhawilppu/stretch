@@ -10,7 +10,8 @@ node days.test.js
 
 rm -rf deploy
 mkdir deploy
-cp index.html styles.css app.js stretches.js days.js favicon.svg icon-180.png deploy/
+cp index.html styles.css app.js stretches.js days.js favicon.svg deploy/
+cp manifest.webmanifest sw.js _headers icon-180.png icon-192.png icon-512.png icon-maskable-512.png deploy/
 mkdir deploy/photos
 cp photos/*.jpg deploy/photos/          # CREDITS.md is for the repo, not the site
 
@@ -29,5 +30,9 @@ stamp deploy/index.html \
   "s#(href|src)=\"(favicon\.svg|icon-180\.png|styles\.css|stretches\.js|days\.js|app\.js)\"#\\1=\"\\2?v=$VERSION\"#g"
 stamp deploy/stretches.js \
   "s#'(photos/[a-z0-9-]+\.jpg)'#'\\1?v=$VERSION'#g"
+
+# The worker's cache is named for the commit, so a deploy retires the old cache
+# whole instead of leaving yesterday's files in it.
+stamp deploy/sw.js "s#__VERSION__#$VERSION#"
 
 npx wrangler pages deploy deploy --project-name=daily-stretch

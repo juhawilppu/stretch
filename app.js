@@ -477,4 +477,16 @@
 
   renderStretch();
 
+  /* Installed on a phone, this runs in a hallway on one bar of signal, so it
+     keeps a copy of itself. Not on a local checkout: the worker would serve the
+     files you are editing from its cache and you would spend an afternoon
+     wondering why a change did nothing. */
+  if (!LOCAL && navigator.serviceWorker) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {
+        /* an app that cannot cache itself still works online */
+      });
+    });
+  }
+
 })();

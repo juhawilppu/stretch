@@ -75,6 +75,37 @@ test('the browser chrome is told the colour the page starts with', () => {
   }
 });
 
+test('everything the offline cache names exists and gets deployed', () => {
+  const fs = require('fs');
+  const sw = fs.readFileSync('sw.js', 'utf8');
+  const deploy = fs.readFileSync('deploy.sh', 'utf8');
+  const manifest = JSON.parse(fs.readFileSync('manifest.webmanifest', 'utf8'));
+
+  /* cache.addAll() is all or nothing: one missing file and the worker never
+     installs, so the app silently loses offline for everyone. Both halves are
+     worth pinning — the file has to be in the repo, and deploy.sh has to carry
+     it to the site. */
+  const list = sw.slice(sw.indexOf('const SHELL'), sw.indexOf('];', sw.indexOf('const SHELL')));
+  const shell = (list.match(/'[^']+'/g) || []).map(q => q.slice(1, -1)).filter(f => f !== './');
+  assert.ok(shell.length > 5, 'could not read the shell list out of sw.js');
+
+  for (const file of shell) {
+    assert.ok(fs.existsSync(file), 'sw.js caches ' + file + ', which is not in the repo');
+    const shipped = deploy.includes(file) ||
+                    (file.startsWith('photos/') && deploy.includes('photos/*.jpg'));
+    assert.ok(shipped, 'sw.js caches ' + file + ', which deploy.sh does not ship');
+  }
+
+  for (const s of STRETCHES) {
+    assert.ok(shell.indexOf(s.photo.src) !== -1,
+      s.photo.src + ' is missing from the offline cache in sw.js');
+  }
+
+  for (const icon of manifest.icons) {
+    assert.ok(fs.existsSync(icon.src), 'the manifest names ' + icon.src + ', which is missing');
+  }
+});
+
 test('the stretches are distinct', () => {
   const ids = new Set(STRETCHES.map(s => s.id));
   assert.strictEqual(ids.size, STRETCHES.length, 'two stretches share an id');

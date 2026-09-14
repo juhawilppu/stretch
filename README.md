@@ -20,6 +20,9 @@ long to hold it, then counts the hold down for you and keeps the streak.
 - **A countdown timer.** One hold, counted down, a chime when it ends, and the
   screen kept awake while it runs.
 - **A streak**, stored in your own browser. Nothing is sent anywhere.
+- **Installs to a home screen** and runs full screen, offline — the whole app is
+  five files and five photographs, and a service worker keeps a copy of all of
+  them. A hallway with one bar of signal is exactly where it gets used.
 - **One fixed screen.** The stretch sits lit on a stage and the page never
   scrolls: the instructions come up as a sheet, and finishing a hold takes the
   whole screen over with the streak.
@@ -79,7 +82,41 @@ page actually starts with.
 | `photos/` | one photograph per stretch, with credits |
 | `days.js` | the calendar-day helpers, kept testable outside a browser |
 | `app.js` | rendering, the timer, the streak |
+| `manifest.webmanifest` | name, colours and icons for an installed app |
+| `sw.js` | the service worker — caches the app so it runs offline |
+| `_headers` | keeps Cloudflare from holding on to the worker and the manifest |
+| `favicon.svg`, `icon-*.png` | the mark: the card with the countdown part-way round it |
 | `deploy.sh` | assembles `deploy/` and publishes it to Cloudflare Pages |
+
+## Installing it on a phone
+
+Open the site in Safari, share sheet, **Add to Home Screen**. It then runs as its
+own app: full screen, no browser chrome, and it opens with no network at all.
+
+Two things worth knowing. An installed web app keeps its own storage, separate
+from Safari's, so the streak you build in the installed app is not the streak you
+see if you later open the same address in a browser tab — pick one and stay with
+it. And the icon is copied at the moment you add it, so if the mark changes,
+remove it and add it again.
+
+## A reminder when you get home
+
+There is no web API for this. Geofencing never shipped in any browser, a web app
+gets no location in the background, and the API for scheduling a notification for
+later was dropped before it shipped. iOS can push to an installed web app since
+16.4, but a push has to be sent by a server that knows to send it.
+
+What does work is iOS's own automation, which is the half of this the phone is
+holding anyway:
+
+1. Shortcuts → **Automation** → **＋** → **Arrive**
+2. Location: Home. Run Immediately, and turn *Notify When Run* off.
+3. Action: **Show Notification** — "Stretch. It takes forty-five seconds."
+
+That fires every time you get home, whether or not the stretch is done, because
+nothing on the phone can see into the app's storage to check. Making it fire only
+when the day is unmarked needs a server: the app tells it when a day is finished,
+the automation asks it on arrival, and it pushes only when the answer is no.
 
 ## Deploying
 
