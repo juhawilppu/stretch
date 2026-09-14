@@ -1,5 +1,5 @@
 #!/bin/sh
-# Publish to Cloudflare Pages, live at https://daily-stretch.juhawilppu.com
+# Publish to Cloudflare Pages, live at https://stretch.juhawilppu.com
 #
 # The site is the repo root, so deploy/ is assembled from just the files a
 # browser needs — the README and the tests stay out of the published site.

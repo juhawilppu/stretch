@@ -7,7 +7,7 @@ kind of thing you do, and doing it every day beats doing twenty minutes of it
 once a fortnight. So this shows exactly one stretch, a photograph of it, and how
 long to hold it, then counts the hold down for you and keeps the streak.
 
-**→ [daily-stretch.juhawilppu.com](https://daily-stretch.juhawilppu.com/)**
+**→ [stretch.juhawilppu.com](https://stretch.juhawilppu.com/)**
 
 ## What it does
 
