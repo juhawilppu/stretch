@@ -51,6 +51,30 @@ test('every stretch has a hold length, cues and a photograph', () => {
   }
 });
 
+test('the browser chrome is told the colour the page starts with', () => {
+  const fs = require('fs');
+  const html = fs.readFileSync('index.html', 'utf8');
+  const css = fs.readFileSync('styles.css', 'utf8');
+
+  /* Safari tints the strip behind the status bar with theme-color, and that strip
+     sits against the top edge of the page — so it has to be --bg-top, where the
+     wash starts, not --bg, where it ends. Getting it wrong reads as a black band
+     above a green page, which is exactly how it was found. */
+  const dark = css.indexOf('@media (prefers-color-scheme: dark)');
+  const blocks = { light: css.slice(0, dark), dark: css.slice(dark) };
+
+  for (const scheme of ['light', 'dark']) {
+    const wanted = (blocks[scheme].match(/--bg-top:\s*(#[0-9a-fA-F]{3,8})/) || [])[1];
+    assert.ok(wanted, '--bg-top is missing from the ' + scheme + ' theme');
+
+    const meta = new RegExp('theme-color" content="(#[0-9a-fA-F]{3,8})" media="' +
+                            '\\(prefers-color-scheme: ' + scheme + '\\)"');
+    const given = (html.match(meta) || [])[1];
+    assert.strictEqual((given || '').toLowerCase(), wanted.toLowerCase(),
+      'the ' + scheme + ' theme-color is not the top of the page');
+  }
+});
+
 test('the stretches are distinct', () => {
   const ids = new Set(STRETCHES.map(s => s.id));
   assert.strictEqual(ids.size, STRETCHES.length, 'two stretches share an id');

@@ -65,8 +65,9 @@ node days.test.js
 
 Covers the calendar helpers the streak is built on — that days stay consecutive
 across a daylight-saving change and survive a round trip through a stored key —
-and that every stretch has cues, a sane hold length and a photograph that is
-actually in the repo.
+that every stretch has cues, a sane hold length and a photograph that is actually
+in the repo, and that the colour the browser chrome is handed is the colour the
+page actually starts with.
 
 ## Layout
 
