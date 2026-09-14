@@ -99,32 +99,42 @@ see if you later open the same address in a browser tab — pick one and stay wi
 it. And the icon is copied at the moment you add it, so if the mark changes,
 remove it and add it again.
 
-## A reminder when you get home
+## A reminder
 
-There is no web API for this. Geofencing never shipped in any browser, a web app
-gets no location in the background, and the API for scheduling a notification for
-later was dropped before it shipped. iOS can push to an installed web app since
-16.4, but a push has to be sent by a server that knows to send it.
+Installing the app does not bring a reminder with it, and nothing the app does
+can add one. A web app cannot schedule a notification for later, cannot ask iOS
+to wake it, and cannot create an automation — the API for scheduled local
+notifications was dropped before it shipped, and iOS only pushes to a web app
+when a server sends the push. The reminder has to be made once, by hand, in
+Shortcuts. It takes half a minute and then it is permanent.
 
-What does work is iOS's own automation, which is the half of this the phone is
-holding anyway:
+**Every evening at eight.** The dependable one: a time comes every day, whether
+or not you went anywhere.
 
-1. Shortcuts → **Automation** → **＋** → **Arrive**
-2. Location: Home. Run Immediately, and turn *Notify When Run* off.
+1. Shortcuts → **Automation** → **＋** → **Time of Day**
+2. 20:00, Daily. **Run Immediately**, and turn *Notify When Run* off.
 3. Action: **Show Notification** — "Stretch. It takes forty-five seconds."
 
-That fires every time you get home, whether or not the stretch is done, because
-nothing on the phone can see into the app's storage to check. Making it fire only
-on an unmarked day would take a server — the app reporting each finished day, the
-automation asking on arrival, a push when the answer is no — and that is the
-trade this app declines. The streak is one line in one browser's storage and it
-has never left the phone; a reminder that knows whether you have stretched is a
-reminder that knows when you are home, kept on someone else's computer. An extra
-notification on a day you have already done it is the cheaper price.
+**When you get home.** Worth adding as well if the evening one catches you out,
+though it is the weaker trigger: no browser has geofencing and a web app gets no
+location in the background, so this is iOS's automation doing the geography.
 
-If the Shortcuts app lists the web app under **Open App**, that action works too
-and skips the tap. It is a home screen web app rather than an installed one, so
-whether it appears depends on the iOS version.
+1. Shortcuts → **Automation** → **＋** → **Arrive**
+2. Location: Home. Run Immediately, *Notify When Run* off.
+3. Action: **Show Notification**, same text.
+
+Either fires whether or not the stretch is done, because nothing on the phone
+can see into the app's storage to check. Making it fire only on an unmarked day
+would take a server — the app reporting each finished day, the automation asking
+it, a push when the answer is no — and that is the trade this app declines. The
+streak is one line in one browser's storage and it has never left the phone; a
+reminder that knows whether you have stretched is a reminder that knows when you
+are home, kept on someone else's computer. An extra notification on a day you
+have already done it is the cheaper price.
+
+If the Shortcuts app lists the web app under **Open App**, that action works in
+place of the notification and skips the tap. It is a home screen web app rather
+than an installed one, so whether it appears depends on the iOS version.
 
 ## Deploying
 
