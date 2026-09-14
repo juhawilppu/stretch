@@ -1,10 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <!-- The app in miniature: the card, dark, with the countdown stroke part-way
        round its edge and the rest of the hold still to come. The green is the
-       app's own jade. pathLength=100 lets the dash read as a percentage of the
-       edge, so the gap can be moved without recomputing the perimeter. -->
+       app's own jade.
+
+       pathLength=100 lets the dash be written as a percentage of the edge. A
+       rounded rect's path begins where the top-left corner ends, so the stroke
+       would start off-centre; -7.63 walks it on by half the top edge — that edge
+       is 27 of the 177 units of perimeter, so half of it is 7.63% — and the
+       stroke starts at top centre and runs clockwise, the way the app's own
+       countdown does. -->
   <rect width="64" height="64" rx="14" fill="#161d1b"/>
   <rect x="7.5" y="7.5" width="49" height="49" rx="11"
         fill="none" stroke="#2fd8a0" stroke-width="7" stroke-linecap="round"
-        pathLength="100" stroke-dasharray="62 38" stroke-dashoffset="-30"/>
+        pathLength="100" stroke-dasharray="70 30" stroke-dashoffset="-7.63"/>
 </svg>
