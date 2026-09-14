@@ -135,7 +135,29 @@
   });
 
   var ring = el['dial-progress'].parentNode;
-  var RING = 0;
+  var RING = 0;          // the card's edge, in the units the dash is measured in
+  var VIEW_H = 300;      // the ring viewBox's height for the current card shape
+  var swept = 0;         // how much of the hold has gone, 0 to 1
+
+  /* The ring is one dash as long as the whole edge, wound off as the hold runs —
+     so its length has to be right, and it is not simply getTotalLength().
+
+     The stroke is `vector-effect: non-scaling-stroke`, which keeps it 4px wide
+     whatever the card's size by stroking the path *after* the SVG is scaled to
+     the card. Dashes are part of the stroke, so they are measured in rendered
+     pixels too, while getTotalLength() answers in the viewBox's own units. Hand
+     the raw length over and the dash covers only 200/card-width of the edge —
+     half of it on a 400px card — and the rest of the pattern trails round behind
+     it like a snake. So measure the path, then scale it the way the card is. */
+  function measureRing() {
+    var box = ring.getBoundingClientRect();
+    if (!box.width || !box.height) return;              // not laid out yet
+
+    var scale = Math.min(box.width / 200, box.height / VIEW_H);   // as `meet` scales it
+    RING = el['dial-progress'].getTotalLength() * scale;
+    el['dial-progress'].style.strokeDasharray = RING;
+    el['dial-progress'].style.strokeDashoffset = RING * swept;
+  }
 
   /* Each photograph gets a card of its own shape rather than being cropped to a
      common one. The countdown traces that card's edge, so the ring has to be
@@ -144,15 +166,21 @@
     el.arena.style.setProperty('--aspect', aspect);
 
     var parts = aspect.split('/');
-    var h = 200 * (parseFloat(parts[1]) / parseFloat(parts[0]));
-    ring.setAttribute('viewBox', '0 0 200 ' + h);
+    VIEW_H = 200 * (parseFloat(parts[1]) / parseFloat(parts[0]));
+    ring.setAttribute('viewBox', '0 0 200 ' + VIEW_H);
     ring.querySelectorAll('rect').forEach(function (r) {
-      r.setAttribute('height', h - 4);
+      r.setAttribute('height', VIEW_H - 4);
     });
 
-    RING = el['dial-progress'].getTotalLength();
-    el['dial-progress'].style.strokeDasharray = RING;
+    measureRing();
   }
+
+  /* The card is not a fixed size: it takes what the screen leaves it, so a
+     rotation, a resized window, or simply a longer stretch name wrapping onto a
+     second line changes how far the ring is scaled — and with it the length the
+     dash has to be. Watch the box rather than guess when it settles. */
+  if (window.ResizeObserver) new ResizeObserver(measureRing).observe(ring);
+  else window.addEventListener('resize', measureRing);
 
   function scene(name) { document.body.dataset.scene = name; }
 
@@ -222,6 +250,12 @@
     document.title = stretch.name + ' · Daily Stretch';
     resetTimer();
     renderStreak();
+
+    /* Last, once every line that can push the card around is on the page: the
+       arena may shrink to make room for a two-line stretch name or a longer
+       streak line, and the ring's length has to be measured against the card
+       that results, not the one the layout started with. */
+    measureRing();
   }
 
   function streakSub(state, streak, doneToday) {
@@ -339,6 +373,7 @@
     scene('brief');
     ring.classList.remove('is-rest');
     el.start.classList.remove('is-running');
+    swept = 0;                  // a whole ring waiting, whatever the card does next
   }
 
   function startPhase(i) {
@@ -352,7 +387,8 @@
 
   function paint(remaining, total) {
     el['dial-count'].textContent = Math.max(0, Math.ceil(remaining));
-    el['dial-progress'].style.strokeDashoffset = RING * (1 - Math.max(0, remaining) / total);
+    swept = 1 - Math.max(0, remaining) / total;
+    el['dial-progress'].style.strokeDashoffset = RING * swept;
   }
 
   /** Driven by a wall-clock deadline, so a backgrounded tab does not drift. */
