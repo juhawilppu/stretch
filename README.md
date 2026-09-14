@@ -11,34 +11,40 @@ long to hold it, then counts the hold down for you and keeps the streak.
 
 ## What it does
 
-- **One stretch, drawn at random from three.** Opening the app deals one of
-  them; the list is short enough that you learn all three by heart.
+- **One stretch, drawn at random from four.** Opening the app deals one of
+  them; the list is short enough that you learn all four by heart.
+- **Nothing to fetch.** Every move is done on bare floor with empty hands — no
+  mat, no strap, no wall, no kneeling.
 - **A photograph of the pose**, shown at its own shape rather than cropped.
-- **A countdown timer.** Two-sided stretches run left, a switch-sides beat, then
-  right, with a chime at each change, and the screen is kept awake while it runs.
+- **A countdown timer.** One hold, counted down, a chime when it ends, and the
+  screen kept awake while it runs.
 - **A streak**, stored in your own browser. Nothing is sent anywhere.
 - **One fixed screen.** The stretch sits lit on a stage and the page never
   scrolls: the instructions come up as a sheet, and finishing a hold takes the
   whole screen over with the streak.
 
-## The three
+## The four
 
 | Stretch | | Hold |
 |---|---|---|
-| Kneeling hip flexor lunge | hip flexors, psoas, front of the hip | 45s each side |
-| Seated butterfly | adductors, inner thigh and groin | 45s |
-| Lying spinal twist | spine, obliques and outer hip | 40s each side |
+| Standing forward fold | hamstrings, calves and the back of the legs | 45s |
+| Seated wide-leg fold | adductors, inner thigh and groin | 45s |
+| Seated forward fold | hamstrings, calves and the lower back | 45s |
+| Standing overhead reach | shoulders, ribs and spine | 40s |
 
-Three, because a short list is one you actually learn — the form stops being
-something you read off the screen and becomes something you know. Between them
-they cover the chain that takes the load twice over: from sitting folded at a
-desk all day, and from folding again on the bike. The front of the hip is the
-one that quietly costs you power; the inner thigh gets no range at all on a bike,
-where the legs only ever travel in one plane; the twist is for the back that both
-positions leave stiff.
+Four, because a short list is one you actually learn — the form stops being
+something you read off the screen and becomes something you know. None of them
+needs a mat, a strap, a wall or anything to kneel on: fetching kit for a single
+stretch is exactly the errand that turns a daily habit into a skipped one.
 
-A day comes to about a minute and a half at most. That is the point — it has to
-be small enough that you never have a good reason to skip it.
+Between them they cover what a day at a desk and an evening on a bike shorten.
+The back of the legs gets it twice over, standing and sitting, because that is
+where sitting all day lands; the inner thigh gets no range at all on a bike,
+where the legs only ever travel in one plane; the overhead reach is the counter
+to the shape a keyboard and a set of handlebars both put you in.
+
+A day comes to forty-five seconds at most. That is the point — it has to be
+small enough that you never have a good reason to skip it.
 
 ## Running it
 
@@ -65,7 +71,7 @@ actually in the repo.
 |---|---|
 | `index.html` | the single screen |
 | `styles.css` | layout, light and dark themes |
-| `stretches.js` | the three stretches — cues, hold lengths, why each one matters |
+| `stretches.js` | the four stretches — cues, hold lengths, why each one matters |
 | `photos/` | one photograph per stretch, with credits |
 | `days.js` | the calendar-day helpers, kept testable outside a browser |
 | `app.js` | rendering, the timer, the streak |
