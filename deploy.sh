@@ -35,4 +35,11 @@ stamp deploy/stretches.js \
 # whole instead of leaving yesterday's files in it.
 stamp deploy/sw.js "s#__VERSION__#$VERSION#"
 
+# Cloudflare will not let _headers take its four hour TTL off a .js, so a new
+# worker could sit unseen behind a cached old one for half a day. Registering it
+# under a URL with the commit in it sidesteps the cache entirely: a deploy asks
+# for a script the browser has never fetched, which is the thing that makes a
+# browser check for a new worker.
+stamp deploy/app.js "s#register\\('sw\\.js'\\)#register('sw.js?v=$VERSION')#"
+
 npx wrangler pages deploy deploy --project-name=daily-stretch

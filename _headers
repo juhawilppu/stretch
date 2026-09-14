@@ -1,8 +1,7 @@
-# Cloudflare Pages serves scripts with a four hour TTL, which is right for the
-# stamped ones and wrong for these two: the worker is how updates arrive at an
-# installed app, and the manifest is read at install time. Both are unstamped,
-# so they have to be revalidated rather than held.
-/sw.js
-  Cache-Control: no-cache
+# Cloudflare Pages holds scripts for four hours, which is right for the stamped
+# ones and wrong for the manifest, which carries no stamp and is read at install
+# time. The worker wants the same treatment and cannot have it — Pages keeps its
+# own TTL on anything .js whatever this file says, which is why the worker is
+# registered with the commit in its URL instead. See deploy.sh.
 /manifest.webmanifest
   Cache-Control: no-cache
