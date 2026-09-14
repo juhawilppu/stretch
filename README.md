@@ -11,8 +11,9 @@ long to hold it, then counts the hold down for you and keeps the streak.
 
 ## What it does
 
-- **One stretch, drawn at random from five.** Opening the app deals one of
-  them; the list is short enough that you learn all five by heart.
+- **One stretch, and the day picks it.** The same move however often you open
+  the app that day, a different one tomorrow, and all five inside a week. It is
+  not a menu and there is nothing to reload your way out of.
 - **Nothing to fetch.** Every move is done on bare floor with empty hands — no
   mat, no strap, no wall, no kneeling.
 - **A photograph of the pose**, shown at its own shape rather than cropped.

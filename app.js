@@ -1,8 +1,8 @@
 /**
  * Daily Stretch
  *
- * One stretch a day, drawn at random from a list of five. The streak is what
- * counts the days; the stretch itself is just whichever one comes up.
+ * One stretch a day, chosen by the day itself from a list of five. The streak is
+ * what counts the days; the stretch itself is just whichever one the day brings.
  *
  * The screen is a fixed, non-scrolling stage with two scenes: `brief` (what
  * today's stretch is) and `run` (the countdown). Everything else — the
@@ -158,9 +158,9 @@
 
   function today() { return new Date(); }
 
-  /* Running from a checkout rather than the published site. The stretch is drawn
-     at random on load, which is awkward when you want a particular one on screen
-     to look at, so local runs get a Shuffle button. */
+  /* Running from a checkout rather than the published site. The published app
+     offers the day's stretch and only that, which is awkward when you want a
+     particular one on screen to look at, so local runs get a Shuffle button. */
   var LOCAL = window.location.protocol === 'file:' ||
               /^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(window.location.hostname);
 
@@ -175,10 +175,19 @@
     return LOCAL ? s.photo.src + '?v=' + Date.now() : s.photo.src;
   }
 
-  /** Never deals `avoid` again, so every press of Shuffle changes the screen. */
-  function pickStretch(avoid) {
-    var pool = STRETCHES.filter(function (s) { return s !== avoid; });
-    return pool[Math.floor(Math.random() * pool.length)];
+  /* The day picks the stretch, and picks the same one all day: open the app at
+     noon and again at nine and it is the same move waiting. Drawing at random on
+     every load made it something you could reload your way out of — one more go
+     and maybe you get the short one — and turned the day's stretch into a thing
+     to negotiate with. A rotation cannot be negotiated with, and it comes round
+     to all five in five days rather than leaving one of them unseen for a fortnight.
+
+     Shuffle steps on from today's move, so a local run can put any card on screen;
+     the next day starts from the day again. */
+  var shuffleSteps = 0;
+
+  function stretchForDay(date) {
+    return STRETCHES[(dayNumber(date) + shuffleSteps) % STRETCHES.length];
   }
 
   var stretch = null;
@@ -187,8 +196,8 @@
     return s.perSide ? s.seconds + 's each side' : s.seconds + ' seconds';
   }
 
-  function renderStretch(avoid) {
-    stretch = pickStretch(avoid);
+  function renderStretch() {
+    stretch = stretchForDay(today());
 
     el.photo.src = photoSrc(stretch);
     el.photo.alt = stretch.name;
@@ -388,7 +397,7 @@
     if (complete()) openFinale();
   });
 
-  el.reroll.addEventListener('click', function () { renderStretch(stretch); });
+  el.reroll.addEventListener('click', function () { shuffleSteps++; renderStretch(); });
 
   el['howto-open'].addEventListener('click', openSheet);
   el['howto-close'].addEventListener('click', closeSheet);
@@ -409,15 +418,25 @@
     }
   });
 
+  /* Midnight with the page still open: the date, the streak and the stretch all
+     belong to the new day now. A hold that is running keeps the stretch it started
+     with — swapping the card out from under a countdown would be unkind — and picks
+     the new one up when it finishes. */
+  function rollOver() {
+    if (running) { renderStreak(); return; }
+    shuffleSteps = 0;
+    renderStretch();
+  }
+
   // Re-acquire the screen lock after the tab comes back, and roll the day over at midnight.
   document.addEventListener('visibilitychange', function () {
     if (document.visibilityState !== 'visible') return;
     if (running) keepAwake();
-    if (dayKey(today()) !== shownDay) renderStreak();
+    if (dayKey(today()) !== shownDay) rollOver();
   });
 
   setInterval(function () {
-    if (!running && dayKey(today()) !== shownDay) renderStreak();
+    if (!running && dayKey(today()) !== shownDay) rollOver();
   }, 60000);
 
   renderStretch();

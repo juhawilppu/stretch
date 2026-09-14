@@ -1,5 +1,5 @@
 /**
- * The five stretches. One is picked at random each time the app opens.
+ * The five stretches. The day picks one of them, and offers that one all day.
  *
  * Five rather than twenty-five because a short list is one you actually learn:
  * the form stops being something you read off the screen and becomes something
