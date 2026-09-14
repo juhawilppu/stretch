@@ -11,8 +11,8 @@ long to hold it, then counts the hold down for you and keeps the streak.
 
 ## What it does
 
-- **One stretch, drawn at random from four.** Opening the app deals one of
-  them; the list is short enough that you learn all four by heart.
+- **One stretch, drawn at random from five.** Opening the app deals one of
+  them; the list is short enough that you learn all five by heart.
 - **Nothing to fetch.** Every move is done on bare floor with empty hands — no
   mat, no strap, no wall, no kneeling.
 - **A photograph of the pose**, shown at its own shape rather than cropped.
@@ -23,16 +23,17 @@ long to hold it, then counts the hold down for you and keeps the streak.
   scrolls: the instructions come up as a sheet, and finishing a hold takes the
   whole screen over with the streak.
 
-## The four
+## The five
 
 | Stretch | | Hold |
 |---|---|---|
 | Standing forward fold | hamstrings, calves and the back of the legs | 45s |
 | Seated wide-leg fold | adductors, inner thigh and groin | 45s |
+| Seated butterfly | groin and the top of the inner thigh | 45s |
 | Seated forward fold | hamstrings, calves and the lower back | 45s |
 | Standing overhead reach | shoulders, ribs and spine | 40s |
 
-Four, because a short list is one you actually learn — the form stops being
+Five, because a short list is one you actually learn — the form stops being
 something you read off the screen and becomes something you know. None of them
 needs a mat, a strap, a wall or anything to kneel on: fetching kit for a single
 stretch is exactly the errand that turns a daily habit into a skipped one.
@@ -40,8 +41,9 @@ stretch is exactly the errand that turns a daily habit into a skipped one.
 Between them they cover what a day at a desk and an evening on a bike shorten.
 The back of the legs gets it twice over, standing and sitting, because that is
 where sitting all day lands; the inner thigh gets no range at all on a bike,
-where the legs only ever travel in one plane; the overhead reach is the counter
-to the shape a keyboard and a set of handlebars both put you in.
+where the legs only ever travel in one plane, and gets it twice — along its
+length in the wide-leg fold, and at the top in the butterfly; the overhead reach
+is the counter to the shape a keyboard and a set of handlebars both put you in.
 
 A day comes to forty-five seconds at most. That is the point — it has to be
 small enough that you never have a good reason to skip it.
@@ -71,7 +73,7 @@ actually in the repo.
 |---|---|
 | `index.html` | the single screen |
 | `styles.css` | layout, light and dark themes |
-| `stretches.js` | the four stretches — cues, hold lengths, why each one matters |
+| `stretches.js` | the five stretches — cues, hold lengths, why each one matters |
 | `photos/` | one photograph per stretch, with credits |
 | `days.js` | the calendar-day helpers, kept testable outside a browser |
 | `app.js` | rendering, the timer, the streak |

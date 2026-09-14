@@ -8,6 +8,7 @@ recorded here anyway, because the people who took them deserve it.
 |---|---|---|
 | `standing-forward-fold.jpg` | RDNE Stock project | [Pexels 8401907](https://www.pexels.com/photo/a-man-doing-stretching-8401907/) |
 | `wide-leg-fold.jpg` | Allan Mas | [Pexels 5368926](https://www.pexels.com/photo/anonymous-ethnic-man-stretching-legs-on-embankment-in-sunlight-5368926/) |
+| `butterfly.jpg` | Pavel Danilyuk | [Pexels 6339393](https://www.pexels.com/photo/a-man-in-sportswear-sitting-on-a-pink-mat-stretching-6339393/) |
 | `seated-forward-fold.jpg` | Marcus Aurelius | [Pexels 6787442](https://www.pexels.com/photo/man-stretching-his-body-forward-6787442/) |
 | `overhead-reach.jpg` | MART PRODUCTION | [Pexels 8846487](https://www.pexels.com/photo/man-stretching-his-body-8846487/) |
 
@@ -17,8 +18,9 @@ a different stretch, or the same stretch with form the instructions warn against
 
 Three further rules the current set follows: every model is male; no model wears
 skin-toned clothing — nude activewear reads as bare skin at the size these are
-shown; and nobody is using a prop the stretch does not need, because the whole
-list is meant to be doable on bare floor with empty hands.
+shown; and nobody is using a prop to get into the stretch — no strap, block, band
+or wall — because the whole list is meant to be doable with empty hands. A mat
+under someone who is simply sitting on it is fine; it is scenery, not equipment.
 
 Each file is cropped from the Pexels original to a clean aspect ratio — the ratio
 in `stretches.js` is the file's own, so the card shows the whole photograph.

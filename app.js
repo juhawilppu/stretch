@@ -1,7 +1,7 @@
 /**
  * Daily Stretch
  *
- * One stretch a day, drawn at random from a list of four. The streak is what
+ * One stretch a day, drawn at random from a list of five. The streak is what
  * counts the days; the stretch itself is just whichever one comes up.
  *
  * The screen is a fixed, non-scrolling stage with two scenes: `brief` (what

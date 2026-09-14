@@ -1,7 +1,7 @@
 /**
- * The four stretches. One is picked at random each time the app opens.
+ * The five stretches. One is picked at random each time the app opens.
  *
- * Four rather than twenty-four because a short list is one you actually learn:
+ * Five rather than twenty-five because a short list is one you actually learn:
  * the form stops being something you read off the screen and becomes something
  * you know. Every one of them is done on bare floor with empty hands — no mat,
  * no strap, no wall, nothing to kneel on. Fetching a mat for a single stretch is
@@ -50,6 +50,22 @@ const STRETCHES = [
       'Stop where the inner thighs pull, not where the back starts to round.'
     ],
     note: 'Inner thighs get almost no range on a bike — the legs only ever travel in one plane. This gives them the other one.'
+  },
+  {
+    id: 'butterfly',
+    name: 'Seated butterfly',
+    area: 'Hips',
+    target: 'Groin and the top of the inner thigh',
+    photo: { src: 'photos/butterfly.jpg', aspect: '12 / 13' },
+    seconds: 45,
+    perSide: false,
+    setup: 'Sit on the floor, put the soles of your feet together and draw the heels in toward you.',
+    steps: [
+      'Sit up tall on your sit bones rather than slumping back onto your tailbone.',
+      'Hold your feet or ankles and let the knees fall open under their own weight.',
+      'To go deeper, hinge forward from the hips with a flat back — never push the knees down.'
+    ],
+    note: 'The wide-leg fold pulls the inner thigh along its length; this one gets in at the top of it, where the leg meets the hip. Bringing the heels closer in makes it sharper, further out makes it kinder.'
   },
   {
     id: 'seated-forward-fold',
