@@ -10,7 +10,7 @@ node days.test.js
 
 rm -rf deploy
 mkdir deploy
-cp index.html styles.css app.js stretches.js days.js favicon.svg deploy/
+cp index.html styles.css app.js stretches.js days.js favicon.svg icon-180.png deploy/
 mkdir deploy/photos
 cp photos/*.jpg deploy/photos/          # CREDITS.md is for the repo, not the site
 
@@ -26,7 +26,7 @@ stamp() {
   sed -E "$2" "$1" > "$1.tmp" && mv "$1.tmp" "$1"
 }
 stamp deploy/index.html \
-  "s#(href|src)=\"(favicon\.svg|styles\.css|stretches\.js|days\.js|app\.js)\"#\\1=\"\\2?v=$VERSION\"#g"
+  "s#(href|src)=\"(favicon\.svg|icon-180\.png|styles\.css|stretches\.js|days\.js|app\.js)\"#\\1=\"\\2?v=$VERSION\"#g"
 stamp deploy/stretches.js \
   "s#'(photos/[a-z0-9-]+\.jpg)'#'\\1?v=$VERSION'#g"
 

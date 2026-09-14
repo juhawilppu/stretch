@@ -1,9 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#c2540c"/>
-  <g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M16 52h10l14-22"/>
-    <path d="M40 30l12 8"/>
-    <path d="M40 30V18"/>
-  </g>
-  <circle cx="40" cy="12" r="5" fill="#fff"/>
+  <!-- The app in miniature: the card, dark, with the countdown stroke part-way
+       round its edge and the rest of the hold still to come. The green is the
+       app's own jade. pathLength=100 lets the dash read as a percentage of the
+       edge, so the gap can be moved without recomputing the perimeter. -->
+  <rect width="64" height="64" rx="14" fill="#161d1b"/>
+  <rect x="7.5" y="7.5" width="49" height="49" rx="11"
+        fill="none" stroke="#2fd8a0" stroke-width="7" stroke-linecap="round"
+        pathLength="100" stroke-dasharray="62 38" stroke-dashoffset="-30"/>
 </svg>
