@@ -16,11 +16,10 @@ Each photograph was checked against the stretch's own `steps` in `stretches.js`
 before it was accepted. Several otherwise good pictures were rejected for showing
 a different stretch, or the same stretch with form the instructions warn against.
 
-Three further rules the current set follows: every model is male; no model wears
-skin-toned clothing — nude activewear reads as bare skin at the size these are
-shown; and nobody is using a prop to get into the stretch — no strap, block, band
-or wall — because the whole list is meant to be doable with empty hands. A mat
-under someone who is simply sitting on it is fine; it is scenery, not equipment.
+One further rule the current set follows: nobody is using a prop to get into the
+stretch — no strap, block, band or wall — because the whole list is meant to be
+doable with empty hands. A mat under someone who is simply sitting on it is fine;
+it is scenery, not equipment.
 
 Each file is cropped from the Pexels original to a clean aspect ratio — the ratio
 in `stretches.js` is the file's own, so the card shows the whole photograph.

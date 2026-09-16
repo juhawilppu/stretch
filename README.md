@@ -1,33 +1,45 @@
-# Daily Stretch
+# Stretch
 
 One stretch a day. Not a routine — one.
 
-A long stretching session is the kind of thing you skip. A single stretch is the
-kind of thing you do, and doing it every day beats doing twenty minutes of it
-once a fortnight. So this shows exactly one stretch, a photograph of it, and how
-long to hold it, then counts the hold down for you and keeps the streak.
-
 **→ [stretch.juhawilppu.com](https://stretch.juhawilppu.com/)**
+
+<p align="center">
+  <img src="screenshots/today.jpg" width="31%" alt="Today's stretch: a photograph of the pose, its name, the hold length and a Start button">
+  <img src="screenshots/hold.jpg" width="31%" alt="The hold running: seconds counting down, a ring draining around the photograph">
+  <img src="screenshots/how-to.jpg" width="31%" alt="The how-to sheet: setup, three numbered steps, and a note on what the stretch is for">
+</p>
+
+## Why this exists
+
+I am forty, I have written software for a living for most of my adult life, and
+the body that comes with that job is stiffening in ways I can now feel. The
+remedy is not a secret. The problem is that a twenty-minute stretching routine is
+exactly the kind of thing you skip, and something you skip four days in five is
+worth less than something small you never skip at all.
+
+So the app shows exactly one stretch. A photograph of it, how to do it, a
+countdown for the hold, and a streak. A day costs forty-five seconds — small
+enough that there is never a good reason to skip it.
+
+This is a tool for one person, and that person is me. No sign-up, no accounts, no
+analytics, no server, nothing to promote and nobody to grow. The streak is one
+line in one browser's storage and it has never left the phone. That is a
+deliberate ceiling, not an unfinished roadmap.
 
 ## What it does
 
-- **One stretch, and the day picks it.** The same move however often you open
-  the app that day, a different one tomorrow, and all five inside a week. It is
-  not a menu and there is nothing to reload your way out of.
+- **The day picks the stretch.** The same move however often you open the app
+  that day, a different one tomorrow, and all five inside a week. It is not a
+  menu, and there is nothing to reload your way out of.
 - **Nothing to fetch.** Every move is done on bare floor with empty hands — no
-  mat, no strap, no wall, no kneeling.
-- **A photograph of the pose**, shown at its own shape rather than cropped.
-- **A countdown timer.** One hold, counted down, a chime when it ends, and the
-  screen kept awake while it runs.
-- **A streak**, stored in your own browser. Nothing is sent anywhere.
-- **Installs to a home screen** and runs full screen, offline — the whole app is
-  five files and five photographs, and a service worker keeps a copy of all of
-  them. A hallway with one bar of signal is exactly where it gets used.
-- **One fixed screen.** The stretch sits lit on a stage and the page never
-  scrolls: the instructions come up as a sheet, and finishing a hold takes the
-  whole screen over with the streak.
-
-## The five
+  mat, no strap, no wall, nothing to kneel on. Fetching kit for a single stretch
+  is exactly the errand that turns a daily habit into a skipped one.
+- **A countdown for the hold**, with a chime at the end and the screen kept awake
+  while it runs.
+- **A streak**, stored locally, and a finish screen that makes a point of it.
+- **Installs to a home screen** and runs full screen and offline. A hallway with
+  one bar of signal is exactly where it gets used.
 
 | Stretch | | Hold |
 |---|---|---|
@@ -38,41 +50,45 @@ long to hold it, then counts the hold down for you and keeps the streak.
 | Standing overhead reach | shoulders, ribs and spine | 40s |
 
 Five, because a short list is one you actually learn — the form stops being
-something you read off the screen and becomes something you know. None of them
-needs a mat, a strap, a wall or anything to kneel on: fetching kit for a single
-stretch is exactly the errand that turns a daily habit into a skipped one.
+something you read off the screen and becomes something you know. Between them
+they cover what a day at a desk and an evening on a bike shorten: the back of the
+legs gets it twice, standing and sitting; the inner thigh, which gets no range at
+all on a bike, gets it twice as well; and the overhead reach is the counter to the
+shape a keyboard and a set of handlebars both put you in.
 
-Between them they cover what a day at a desk and an evening on a bike shorten.
-The back of the legs gets it twice over, standing and sitting, because that is
-where sitting all day lands; the inner thigh gets no range at all on a bike,
-where the legs only ever travel in one plane, and gets it twice — along its
-length in the wide-leg fold, and at the top in the butterfly; the overhead reach
-is the counter to the shape a keyboard and a set of handlebars both put you in.
+## It is completely vibe-coded
 
-A day comes to forty-five seconds at most. That is the point — it has to be
-small enough that you never have a good reason to skip it.
+Every line of this — the app, the tests, the deploy script, the icon, this README
+— was written by [Claude Code](https://claude.com/claude-code). I did not type
+the code. What I did was decide what the thing should be and refuse the versions
+that were not it: cut the list from twenty-odd stretches to five, throw out every
+move that needed a mat or a strap, replace random selection with a rotation the
+day chooses so the app cannot be re-rolled, drop the drawn stick figures once real
+photographs turned out to teach the pose better, and reject photographs showing
+form the instructions warn against.
 
-## Running it
+I am putting that on the label rather than in a footnote, because I think the
+honest version is the interesting one. The taste, the scope and the calls about
+what to leave out are mine; the typing was not. I like the end result more than I
+expected to, and I use it every day.
 
-No build step and no dependencies. Open `index.html` in a browser, or:
+## How it is built
+
+No framework, no dependencies, no build step, no bundler — around 1,500 lines of
+plain HTML, CSS and ES5-flavoured JavaScript, served as the files they are. For an
+app this size a toolchain would have been more moving parts than app.
 
 ```sh
 python3 -m http.server 8765     # then open http://localhost:8765
+node days.test.js               # the tests
 ```
 
-## Tests
-
-```sh
-node days.test.js
-```
-
-Covers the calendar helpers the streak is built on — that days stay consecutive
-across a daylight-saving change and survive a round trip through a stored key —
-that every stretch has cues, a sane hold length and a photograph that is actually
-in the repo, and that the colour the browser chrome is handed is the colour the
-page actually starts with.
-
-## Layout
+The tests cover the part that is genuinely easy to get wrong: calendar days stay
+consecutive across a daylight-saving change and survive a round trip through
+storage, every stretch has cues, a sane hold length and a photograph that is
+actually in the repo, and the colour handed to the browser chrome is the colour
+the page really starts with. `days.js` is deliberately separate from the app so it
+can be tested with bare `node`, no browser and no test framework.
 
 | File | |
 |---|---|
@@ -80,80 +96,55 @@ page actually starts with.
 | `styles.css` | layout, light and dark themes |
 | `stretches.js` | the five stretches — cues, hold lengths, why each one matters |
 | `photos/` | one photograph per stretch, with credits |
-| `days.js` | the calendar-day helpers, kept testable outside a browser |
+| `days.js` | calendar-day helpers, kept testable outside a browser |
 | `app.js` | rendering, the timer, the streak |
-| `manifest.webmanifest` | name, colours and icons for an installed app |
-| `sw.js` | the service worker — caches the app so it runs offline |
-| `_headers` | keeps Cloudflare from holding on to the worker and the manifest |
-| `favicon.svg`, `icon-*.png` | the mark: the card with the countdown part-way round it |
-| `deploy.sh` | assembles `deploy/` and publishes it to Cloudflare Pages |
+| `manifest.webmanifest`, `sw.js` | installable, and cached so it runs offline |
+| `_headers` | keeps Cloudflare from holding on to the manifest |
+| `deploy.sh` | assembles `deploy/` and publishes it |
 
-## Installing it on a phone
+## How deployment works
 
-Open the site in Safari, share sheet, **Add to Home Screen**. It then runs as its
-own app: full screen, no browser chrome, and it opens with no network at all.
-
-Two things worth knowing. An installed web app keeps its own storage, separate
-from Safari's, so the streak you build in the installed app is not the streak you
-see if you later open the same address in a browser tab — pick one and stay with
-it. And the icon is copied at the moment you add it, so if the mark changes,
-remove it and add it again.
-
-## A reminder
-
-Installing the app does not bring a reminder with it, and nothing the app does
-can add one. A web app cannot schedule a notification for later, cannot ask iOS
-to wake it, and cannot create an automation — the API for scheduled local
-notifications was dropped before it shipped, and iOS only pushes to a web app
-when a server sends the push. The reminder has to be made once, by hand, in
-Shortcuts. It takes half a minute and then it is permanent.
-
-**Every evening at eight.** The dependable one: a time comes every day, whether
-or not you went anywhere.
-
-1. Shortcuts → **Automation** → **＋** → **Time of Day**
-2. 20:00, Daily. **Run Immediately**, and turn *Notify When Run* off.
-3. Action: **Show Notification** — "Stretch. It takes forty-five seconds."
-
-**When you get home.** Worth adding as well if the evening one catches you out,
-though it is the weaker trigger: no browser has geofencing and a web app gets no
-location in the background, so this is iOS's automation doing the geography.
-
-1. Shortcuts → **Automation** → **＋** → **Arrive**
-2. Location: Home. Run Immediately, *Notify When Run* off.
-3. Action: **Show Notification**, same text.
-
-Either fires whether or not the stretch is done, because nothing on the phone
-can see into the app's storage to check. Making it fire only on an unmarked day
-would take a server — the app reporting each finished day, the automation asking
-it, a push when the answer is no — and that is the trade this app declines. The
-streak is one line in one browser's storage and it has never left the phone; a
-reminder that knows whether you have stretched is a reminder that knows when you
-are home, kept on someone else's computer. An extra notification on a day you
-have already done it is the cheaper price.
-
-If the Shortcuts app lists the web app under **Open App**, that action works in
-place of the notification and skips the tap. It is a home screen web app rather
-than an installed one, so whether it appears depends on the iOS version.
-
-## Deploying
-
-Cloudflare Pages, direct upload — the same arrangement as `kantarelli-map`:
+Cloudflare Pages, direct upload. One command:
 
 ```sh
 ./deploy.sh
 ```
 
-That runs the tests, assembles `deploy/` from just the files a browser needs —
-the README and the tests stay off the published site — and uploads it to the
-`daily-stretch` project. `deploy/` is generated, so it is gitignored rather than
-committed.
+That runs the tests, assembles a `deploy/` directory from just the files a browser
+needs — the README, the screenshots and the tests stay off the published site —
+and uploads it with `wrangler`. `deploy/` is generated, so it is gitignored rather
+than committed.
 
-Every asset URL is stamped with the commit on the way out. Cloudflare serves
-`index.html` with `max-age=0` but scripts, styles and photographs with a four
-hour TTL, so without the stamp a returning visitor spends four hours pairing a
-fresh `index.html` with stale scripts — which breaks the page rather than merely
-dating it.
+Pushing to `master` does **not** publish. The Pages project is direct-upload
+rather than wired to the repo, so a deploy is always an explicit `./deploy.sh`.
+(The Pages project still carries this repo's original name, `daily-stretch`.)
 
-Pushing to `master` does **not** publish: the project is direct-upload rather
-than wired to the repo, so deploying is always an explicit `./deploy.sh`.
+The one non-obvious part is cache busting. Cloudflare serves `index.html` with
+`max-age=0` but scripts, styles and photographs with a four-hour TTL, so without
+help a returning visitor can spend four hours pairing a fresh `index.html` with a
+stale `app.js` — which breaks the page rather than merely dating it. So the deploy
+stamps the commit hash onto every asset URL, names the service worker's cache
+after the commit, and registers the worker under a URL carrying the commit too,
+since Pages keeps its own TTL on anything `.js` whatever `_headers` says. Each
+deploy is therefore a set of files that can only load together.
+
+## Reminders
+
+Installing the app does not bring a reminder with it, and nothing the app can do
+will add one: a web app cannot schedule a local notification, cannot ask iOS to
+wake it, and cannot create an automation. The reminder is made once by hand — an
+iOS Shortcuts automation, **Time of Day**, 20:00 daily, **Show Notification**.
+
+It fires whether or not the stretch is already done, because nothing on the phone
+can see into the app's storage to check. Making it conditional would take a
+server: the app reporting each finished day, the automation asking it, a push when
+the answer is no. That is the trade this app declines. A reminder that knows
+whether you have stretched is a reminder that knows when you are home, kept on
+someone else's computer. An extra notification on a day you have already done it
+is the cheaper price.
+
+## Credits
+
+Photographs are from [Pexels](https://www.pexels.com/license/), free to use
+without attribution; the photographers are credited anyway in
+[`photos/CREDITS.md`](photos/CREDITS.md).
